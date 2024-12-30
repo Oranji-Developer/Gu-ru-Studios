@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enum\Course;
+namespace App\Enum\Courses;
 
 use App\Trait\EnumAction;
 

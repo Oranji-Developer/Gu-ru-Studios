@@ -1,8 +1,8 @@
 <?php
 
-use App\Enum\Course\AcademicClass;
-use App\Enum\Course\ArtsClass;
-use App\Enum\Course\CourseType;
+use App\Enum\Courses\AcademicClass;
+use App\Enum\Courses\ArtsClass;
+use App\Enum\Courses\CourseType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
