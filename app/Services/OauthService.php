@@ -27,6 +27,7 @@ class OauthService implements OauthInterface
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
+                    'email_verified_at' => now(),
                     'gauth_id' => $user->id,
                     'gauth_type' => 'google',
                     'role' => 'customer',
