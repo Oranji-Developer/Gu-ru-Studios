@@ -26,7 +26,7 @@ class OauthController extends Controller
         $isSuccess = $this->service->handleProviderCallback();
 
         return $isSuccess
-            ? redirect()->route('dashboard')->with("success", "Login Successfully")
-            : redirect()->route('login')->with("error", "Error To Login With Google");
+            ? redirect()->route('dashboard')->with("success", "Login berhasil!!")
+            : redirect()->route('login')->with("error", "Login gagal!!");
     }
 }
