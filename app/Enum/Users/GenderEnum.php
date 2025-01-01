@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enum\User;
+namespace App\Enum\Users;
 
 use App\Trait\EnumAction;
 

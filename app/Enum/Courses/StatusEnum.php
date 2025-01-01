@@ -8,7 +8,7 @@ enum StatusEnum: string
 {
     use EnumAction;
 
-    case PAID = 'Lunas';
-    case UNPAID = 'Belum Lunas';
-    case CANCELED = 'Dibatalkan';
+    case ACTIVE = 'Aktif';
+    case INACTIVE = 'Tidak Aktif';
+    case DELETED = 'Dihapus';
 }
