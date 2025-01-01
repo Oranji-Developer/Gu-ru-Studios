@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('thumbnail', 150)->nullable();
             $table->decimal('disc', 5, 2)->default(0);
             $table->enum('course_type', CourseType::getValues());
-            $table->enum('class', array_merge(AcademicClass::getValues(), ArtsClass::getValues()));
+            $table->enum('class', array_merge(AcademicClass::getValues(), ArtsClass::getValues()))->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

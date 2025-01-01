@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->decimal('cost', 10, 2);
             $table->decimal('disc', 5, 2)->default(0);
             $table->enum('course_type', CourseType::getValues());
-            $table->enum('class', array_merge(AcademicClass::getValues(), ArtsClass::getValues()));
+            $table->enum('class', array_merge(AcademicClass::getValues(), ArtsClass::getValues()))->nullable();
             $table->string('thumbnail', 150)->nullable();
             $table->enum('status', StatusEnum::getValues());
             $table->timestamps();
