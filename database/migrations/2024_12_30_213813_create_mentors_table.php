@@ -13,14 +13,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('mentor', function (Blueprint $table) {
+        Schema::create('mentors', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
+            $table->string('address')->nullable();
             $table->text('desc');
             $table->string('profile_picture', 150)->nullable();
+            $table->string('cv', 150)->nullable();
             $table->string('portfolio', 150)->nullable();
-            $table->enum('course_type', CourseType::getValues());
-            $table->enum('class', array_merge(AcademicClass::getValues(), ArtsClass::getValues()));
+            $table->enum('field', CourseType::getValues());
             $table->timestamps();
         });
     }
