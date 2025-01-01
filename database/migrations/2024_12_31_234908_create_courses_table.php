@@ -3,6 +3,7 @@
 use App\Enum\Courses\AcademicClass;
 use App\Enum\Courses\ArtsClass;
 use App\Enum\Courses\CourseType;
+use App\Enum\Courses\StatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,14 +14,18 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('mentor', function (Blueprint $table) {
+        Schema::create('courses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mentor_id')->constrained('mentors')->cascadeOnDelete();
             $table->string('name', 100);
             $table->text('desc');
-            $table->string('profile_picture', 150)->nullable();
-            $table->string('portfolio', 150)->nullable();
+            $table->integer('capacity');
+            $table->decimal('cost', 10, 2);
+            $table->decimal('disc', 5, 2)->default(0);
             $table->enum('course_type', CourseType::getValues());
             $table->enum('class', array_merge(AcademicClass::getValues(), ArtsClass::getValues()));
+            $table->string('thumbnail', 150)->nullable();
+            $table->enum('status', StatusEnum::getValues());
             $table->timestamps();
         });
     }
@@ -30,6 +35,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('mentor');
+        Schema::dropIfExists('courses');
     }
 };
