@@ -1,19 +1,25 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link } from '@inertiajs/react';
-import { PropsWithChildren } from 'react';
+import ApplicationLogo from "@/components/ApplicationLogo";
+import { Link } from "@inertiajs/react";
+import SliderImage from "@/components/SliderImage";
+import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
+import { PropsWithChildren } from "react";
 
 export default function Guest({ children }: PropsWithChildren) {
     return (
-        <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0">
-            <div>
-                <Link href="/">
-                    <ApplicationLogo className="h-20 w-20 fill-current text-gray-500" />
+        <main className="p-4 grid grid-cols-2 gap-4 h-screen">
+            <section className="flex justify-center items-center overflow-hidden relative">
+                <Link
+                    href="/"
+                    className="absolute top-8 left-8 z-30 backdrop-blur-md p-4 rounded-full flex bg-black/55 bg-opacity-50"
+                >
+                    <ArrowLongLeftIcon className="text-white w-6 me-2" />
+                    <h1 className="text-white text-xl">Kembali Ke Home</h1>
                 </Link>
-            </div>
-
-            <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
-                {children}
-            </div>
-        </div>
+                <SliderImage />
+            </section>
+            <section className="flex justify-center items-center">
+                <div>{children}</div>
+            </section>
+        </main>
     );
 }
