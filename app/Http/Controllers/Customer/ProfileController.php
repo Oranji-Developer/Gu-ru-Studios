@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Customer;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Services\Customer\ProfileService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,6 +15,13 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+    private ProfileService $service;
+
+    public function __construct(ProfileService $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * Display the user's profile form.
      */
@@ -29,35 +38,10 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $isSuccess = $this->service->update($request);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return $isSuccess
+            ? Redirect::route('profile.edit')->with('status', 'Profile berhasil diperbarui!')
+            : Redirect::back()->with('error', 'Profile gagal diperbarui!');
     }
 }
