@@ -9,6 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import GoogleIcon from "@/assets/svgr/google";
+import InputPassword from "@/components/InputPassword";
 
 export default function Login({
     status,
@@ -26,8 +27,6 @@ export default function Login({
             password: "",
         },
     });
-
-    const page = usePage();
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -74,21 +73,15 @@ export default function Login({
                     </div>
 
                     <div className="mt-4">
-                        <Label htmlFor="password">Password </Label>
-                        <Input
+                        <InputPassword
                             id="password"
-                            type="password"
                             name="password"
-                            value={data.password}
-                            className="mt-1 block w-full"
-                            autoComplete="current-password"
                             onChange={(e) =>
                                 setData("password", e.target.value)
                             }
-                        />
-                        <InputError
-                            message={errors.password}
-                            className="mt-2"
+                            value={data.password}
+                            placeholder="Password"
+                            error={errors.password}
                         />
                     </div>
                     <div className="mt-4 mb-8">
