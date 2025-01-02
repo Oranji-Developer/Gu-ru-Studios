@@ -1,4 +1,3 @@
-import ApplicationLogo from "@/components/ApplicationLogo";
 import { Link } from "@inertiajs/react";
 import SliderImage from "@/components/SliderImage";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";

@@ -1,7 +1,7 @@
 import InputError from "@/components/InputError";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
-import { FormEventHandler, useEffect } from "react";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { FormEventHandler } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -31,11 +31,15 @@ export default function Login({
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route("login"), {
-            onFinish: () => {
-                reset();
-            },
-        });
+        const dataParse = UserSchema.LOGIN.safeParse(data);
+        console.log(dataParse);
+        if (dataParse.success) {
+            post(route("login"), {
+                onFinish: () => {
+                    reset();
+                },
+            });
+        }
     };
 
     return (
@@ -65,6 +69,7 @@ export default function Login({
                             id="email"
                             name="email"
                             value={data.email}
+                            placeholder="Email"
                             autoComplete="email"
                             onChange={(e) => setData("email", e.target.value)}
                         />
