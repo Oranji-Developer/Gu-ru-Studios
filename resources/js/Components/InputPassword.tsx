@@ -13,9 +13,12 @@ export default function InputWithLabel({
     placeholder,
     id,
     error,
+    label = "Password",
+    name = "password",
 }: {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     value: string;
+    label?: string;
     placeholder: string;
     id: string;
     name: string;
@@ -25,10 +28,10 @@ export default function InputWithLabel({
 
     return (
         <div className="">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{label}</Label>
             <div className="relative">
                 <Input
-                    name="password"
+                    name={name}
                     type={showPassword ? "text" : "password"}
                     id={id}
                     placeholder={placeholder}
