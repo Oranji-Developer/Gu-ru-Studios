@@ -1,121 +1,143 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import InputError from "@/components/InputError";
+import InputPassword from "@/components/InputPassword";
+import { Label } from "@/components/ui/label";
+import GuestLayout from "@/Layouts/GuestLayout";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { FormEventHandler, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserSchema } from "@/lib/schema/UserSchema";
+import { z } from "zod";
+import GoogleIcon from "@/assets/svgr/google";
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+    const { data, setData, post, processing, errors, reset } = useForm<
+        z.infer<typeof UserSchema.REGISTER>
+    >({
+        resolver: zodResolver(UserSchema.REGISTER),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            password_confirmation: "",
+        },
     });
 
-    const submit: FormEventHandler = (e) => {
+    const [zodError, setZodError] = useState<string | null>(null);
+
+    const submit: FormEventHandler = async (e) => {
         e.preventDefault();
 
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
+        let dataParse = await UserSchema.REGISTER.safeParseAsync(data);
+
+        if (dataParse.success) {
+            setZodError(null);
+            post(route("register"), {
+                onFinish: () => reset("password", "password_confirmation"),
+            });
+        } else {
+            setZodError(
+                dataParse.error.errors.map((e) => e.message).join(", ")
+            );
+            setData("password", "");
+            setData("password_confirmation", "");
+        }
     };
 
     return (
         <GuestLayout>
             <Head title="Register" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.name} className="mt-2" />
+            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
+                <div className="mb-8">
+                    <h1 className="text-[3.25rem] font-medium">Buat akun</h1>
+                    <p className="text-gray-500">
+                        Udah Punya Akun?{" "}
+                        <Link href="login" className="underline text-black">
+                            Login aja
+                        </Link>
+                    </p>
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
+                {/* error for zod */}
+                <div className="mb-4 text-sm font-medium text-red-600">
+                    {zodError}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                <form onSubmit={submit}>
+                    <div>
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            name="name"
+                            value={data.name}
+                            placeholder="Name"
+                            autoComplete="name"
+                            onChange={(e) => setData("name", e.target.value)}
+                        />
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
+                        <InputError message={errors.name} className="mt-2" />
+                    </div>
+                    <div className="mt-4">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            name="email"
+                            value={data.email}
+                            placeholder="Email"
+                            autoComplete="email"
+                            onChange={(e) => setData("email", e.target.value)}
+                        />
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
+                        <InputError message={errors.email} className="mt-2" />
+                    </div>
 
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
+                    <div className="mt-4">
+                        <InputPassword
+                            id="password"
+                            name="password"
+                            onChange={(e) =>
+                                setData("password", e.target.value)
+                            }
+                            value={data.password}
+                            placeholder="Password"
+                            error={errors.password}
+                        />
+                    </div>
 
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        required
-                    />
+                    <div className="mt-4 mb-4">
+                        <InputPassword
+                            label="Confirm Password"
+                            id="password_confirmation"
+                            name="password_confirmation"
+                            onChange={(e) =>
+                                setData("password_confirmation", e.target.value)
+                            }
+                            value={data.password_confirmation}
+                            placeholder="Confirm password"
+                            error={errors.password}
+                        />
+                    </div>
 
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
-                </div>
-            </form>
+                    <Button className="w-full" disabled={processing}>
+                        Buat akun
+                    </Button>
+                    <div className="flex items-center my-8 ">
+                        <div className="bg-gray-300 h-0.5 rounded-full flex-auto"></div>
+                        <div className="mx-3 text-gray-500">
+                            atau login dengan
+                        </div>
+                        <div className="bg-gray-300 h-0.5 rounded-full flex-auto"></div>
+                    </div>
+                    <a href={"oauth/google"} target="_blank">
+                        <Button variant="outline" className="w-full">
+                            <GoogleIcon className="w-6 h-6" />
+                            Login dengan Google
+                        </Button>
+                    </a>
+                </form>
+            </section>
         </GuestLayout>
     );
 }
