@@ -297,7 +297,7 @@ const CarouselPagination = React.forwardRef<
                             ? "bg-white"
                             : "bg-white/30 hover:bg-gray-300"
                     )}
-                    aria-label={`Go to slide ${index + 1}`}
+                    aria-label={`slide ${index + 1}`}
                 />
             ))}
         </div>
