@@ -50,20 +50,24 @@ class SendVerificationEmail extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(object $notifiable): MailMessage|null
     {
-        $verificationUrl = $this->verificationUrl($notifiable);
+        try {
 
-        Log::info('Sending verification email to: ' . $notifiable->email);
+            $verificationUrl = $this->verificationUrl($notifiable);
 
-        return (new MailMessage)
-            ->subject('Verify Your Email Address')
-            ->greeting('Hello, ' . $notifiable->name . '!')
-            ->line('Thank you for signing up. Please verify your email address by clicking the button below.')
-            ->action('Verify Email', $verificationUrl)
-            ->line('This link will expire in 60 minutes.')
-            ->line('If you did not create an account, no further action is required.')
-            ->salutation('Regards, Your Application Team');
+            Log::info('Sending verification email to: ' . $notifiable->email);
+
+            return (new MailMessage)
+                ->subject('Welcome to ' . config('app.name') . ' - Verify Your Email')
+                ->view('emails.verification', [
+                    'user' => $notifiable->name,
+                    'verificationUrl' => $verificationUrl,
+                ]);
+        } catch (\Exception $e) {
+            Log::error('Error sending verification email: ' . $e->getMessage());
+            return null;
+        }
     }
 
     /**

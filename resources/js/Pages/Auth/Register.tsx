@@ -1,18 +1,18 @@
 import InputError from "@/components/InputError";
 import InputPassword from "@/components/InputPassword";
-import { Label } from "@/components/ui/label";
+import {Label} from "@/components/ui/label";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
-import { FormEventHandler, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UserSchema } from "@/lib/schema/UserSchema";
-import { z } from "zod";
+import {Head, Link, useForm} from "@inertiajs/react";
+import {FormEventHandler, useState} from "react";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {UserSchema} from "@/lib/schema/UserSchema";
+import {z} from "zod";
 import GoogleIcon from "@/assets/svgr/google";
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm<
+    const {data, setData, post, processing, errors, reset} = useForm<
         z.infer<typeof UserSchema.REGISTER>
     >({
         resolver: zodResolver(UserSchema.REGISTER),
@@ -47,7 +47,7 @@ export default function Register() {
 
     return (
         <GuestLayout>
-            <Head title="Register" />
+            <Head title="Register"/>
 
             <section className="px-8 py-4 w-[calc(40vw-6rem)]">
                 <div className="mb-8">
@@ -77,7 +77,7 @@ export default function Register() {
                             onChange={(e) => setData("name", e.target.value)}
                         />
 
-                        <InputError message={errors.name} className="mt-2" />
+                        <InputError message={errors.name} className="mt-2"/>
                     </div>
                     <div className="mt-4">
                         <Label htmlFor="email">Email</Label>
@@ -90,7 +90,7 @@ export default function Register() {
                             onChange={(e) => setData("email", e.target.value)}
                         />
 
-                        <InputError message={errors.email} className="mt-2" />
+                        <InputError message={errors.email} className="mt-2"/>
                     </div>
 
                     <div className="mt-4">
@@ -132,7 +132,7 @@ export default function Register() {
                     </div>
                     <a href={"oauth/google"} target="_blank">
                         <Button variant="outline" className="w-full">
-                            <GoogleIcon className="w-6 h-6" />
+                            <GoogleIcon className="w-6 h-6"/>
                             Login dengan Google
                         </Button>
                     </a>
