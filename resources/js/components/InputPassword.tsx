@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Button } from "@/Components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
-import InputError from "@/component/InputError";
+import InputError from "@/components/InputError";
 
 export default function InputWithLabel({
     onChange,

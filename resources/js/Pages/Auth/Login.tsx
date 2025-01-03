@@ -1,4 +1,4 @@
-import InputError from "@/component/InputError";
+import InputError from "@/components/InputError";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
@@ -9,7 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import GoogleIcon from "@/assets/svgr/google";
-import InputPassword from "@/component/InputPassword";
+import InputPassword from "@/components/InputPassword";
 
 export default function Login({
     status,

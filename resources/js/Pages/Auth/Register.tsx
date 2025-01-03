@@ -1,5 +1,5 @@
-import InputError from "@/component/InputError";
-import InputPassword from "@/component/InputPassword";
+import InputError from "@/components/InputError";
+import InputPassword from "@/components/InputPassword";
 import { Label } from "@/Components/ui/label";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
