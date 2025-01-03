@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-import SliderImage from "@/components/SliderImage";
+import SliderImage from "@/component/SliderImage";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import { PropsWithChildren } from "react";
 

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Button } from "@/Components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
-import InputError from "@/components/InputError";
+import InputError from "@/component/InputError";
 
 export default function InputWithLabel({
     onChange,

@@ -3,7 +3,7 @@ import {
     CarouselContent,
     CarouselItem,
     CarouselPagination,
-} from "@/components/ui/carousel";
+} from "@/Components/ui/carousel";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
 

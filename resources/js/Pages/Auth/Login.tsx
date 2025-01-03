@@ -1,15 +1,15 @@
-import InputError from "@/components/InputError";
+import InputError from "@/component/InputError";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Button } from "@/Components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import GoogleIcon from "@/assets/svgr/google";
-import InputPassword from "@/components/InputPassword";
+import InputPassword from "@/component/InputPassword";
 
 export default function Login({
     status,
