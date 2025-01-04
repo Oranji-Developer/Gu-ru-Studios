@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\ResetPasswordNotification;
+use App\Notifications\SendVerificationEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -28,6 +30,8 @@ class User extends Authenticatable
         'address',
         'role',
         'remember_token',
+        'gauth_id',
+        'gauth_type',
     ];
 
     /**
@@ -39,6 +43,17 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new SendVerificationEmail());
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
 
     /**
      * Get the attributes that should be cast.
