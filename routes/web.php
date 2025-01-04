@@ -14,7 +14,12 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified', 'profiled'])->name('dashboard');
 
+Route::group(['middleware' => ['auth', 'verified', 'profiled']], function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    //just for test
+    Route::get('/product', [ProfileController::class, 'show'])->name('product');
+});
