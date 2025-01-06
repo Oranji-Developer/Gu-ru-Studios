@@ -14,9 +14,9 @@ export default function Profilled({ status }: { status?: string }) {
     const page = usePage();
 
     const { data, setData, post, processing, errors, reset } = useForm<
-        z.infer<typeof UserSchema.PROFILE>
+        z.infer<typeof UserSchema.UPDATE>
     >({
-        resolver: zodResolver(UserSchema.PROFILE),
+        resolver: zodResolver(UserSchema.UPDATE),
         email: page.props.auth.user.email,
         name: page.props.auth.user.name,
         phone: "",
@@ -28,7 +28,7 @@ export default function Profilled({ status }: { status?: string }) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        const dataParse = UserSchema.PROFILE.safeParse(data);
+        const dataParse = UserSchema.UPDATE.safeParse(data);
         if (dataParse.success) {
             post(route("profiled.store"), {
                 onFinish: () => {

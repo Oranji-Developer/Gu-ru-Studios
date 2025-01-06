@@ -24,7 +24,7 @@ export class UserSchema {
             return data;
         });
 
-    static readonly PROFILE: ZodType = z.object({
+    static readonly UPDATE: ZodType = z.object({
         phone: z
             .string()
             .nonempty("Nomer telepon harus dilengkapi")
@@ -45,4 +45,21 @@ export class UserSchema {
         name: z.string().min(3).max(100),
         email: z.string().email().max(100),
     });
+
+    static readonly UPDATEPASSWORD: ZodType = z
+        .object({
+            current_password: z.string().min(6),
+            password: z.string().min(6),
+            password_confirmation: z.string().min(6),
+        })
+        .superRefine((data, ctx) => {
+            if (data.password !== data.password_confirmation) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "Password and password confirmation must match",
+                });
+            }
+
+            return data;
+        });
 }

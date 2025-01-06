@@ -27,8 +27,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+        return Inertia::render('Settings/Profile', [
             'status' => session('status'),
         ]);
     }
@@ -44,4 +43,27 @@ class ProfileController extends Controller
             ? Redirect::route('profile.edit')->with('status', 'Profile berhasil diperbarui!')
             : Redirect::back()->with('error', 'Profile gagal diperbarui!');
     }
+
+    /**
+     * Control the user's account form.
+     */
+
+    public function editAccount(Request $request): Response
+    {
+        return Inertia::render('Settings/Account', [
+            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'status' => session('status'),
+        ]);
+    }
+
+    public function updateAccount(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $isSuccess = $this->service->update($request);
+
+        return $isSuccess
+            ? Redirect::route('account.edit')->with('status', 'Account berhasil diperbarui!')
+            : Redirect::back()->with('error', 'Account gagal diperbarui!');
+    }
+
+
 }

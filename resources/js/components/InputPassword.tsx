@@ -28,7 +28,7 @@ export default function InputWithLabel({
 
     return (
         <div className="">
-            <Label htmlFor="password">{label}</Label>
+            {label && <Label htmlFor="password">{label}</Label>}
             <div className="relative">
                 <Input
                     name={name}

@@ -42,10 +42,13 @@ export default function Authenticated({
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
                                     <NavLink
-                                        href={route("product")}
-                                        active={route().current("product")}
+                                        href={route("profile.edit")}
+                                        active={
+                                            route().current("profile.edit") ||
+                                            route().current("account.edit")
+                                        }
                                     >
-                                        Products
+                                        Settings
                                     </NavLink>
                                 </NavigationMenuItem>
                             </NavigationMenuList>
