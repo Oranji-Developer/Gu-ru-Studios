@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('password')->nullable();
             $table->string('phone', 20)->nullable();
             $table->string('address')->nullable();
-            $table->enum('role', RoleEnum::getValues());
+            $table->enum('role', RoleEnum::getValues())->default(RoleEnum::CUSTOMER->value);
             $table->rememberToken();
             $table->timestamps();
         });
