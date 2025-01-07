@@ -131,7 +131,7 @@ export default function Register() {
                         <div className="bg-gray-300 h-0.5 rounded-full flex-auto"></div>
                     </div>
                     <a href={"oauth/google"} target="_blank">
-                        <Button variant="outline" className="w-full">
+                        <Button variant="outline" className="w-full" type="button">
                             <GoogleIcon className="w-6 h-6"/>
                             Login dengan Google
                         </Button>
