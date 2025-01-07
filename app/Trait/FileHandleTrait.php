@@ -55,7 +55,7 @@ trait FileHandleTrait
      * @param array<string>|null $fields
      * @return void
      */
-    public function deleteFiles(?array $fields = null): void
+    public function deleteFilesFolder(?array $fields = null): void
     {
         $fieldsToDelete = $fields ?? array_keys($this->fileConfigs);
 
@@ -63,6 +63,19 @@ trait FileHandleTrait
             if (isset($this->$field) && Storage::disk('public')->exists($this->$field)) {
                 Storage::disk('public')->delete($this->$field);
             }
+        }
+    }
+
+    /**
+     * Delete files
+     *
+     * @param array<string> $files
+     * @return void
+     */
+    public function deleteFiles(array $files): void
+    {
+        foreach ($files as $file) {
+            $this->deleteFile($file);
         }
     }
 

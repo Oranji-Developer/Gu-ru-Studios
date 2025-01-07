@@ -6,6 +6,7 @@ use App\Enum\Courses\CourseType;
 use App\Enum\Users\GenderEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMentorRequest;
+use App\Http\Requests\Admin\UpdateMentorRequest;
 use App\Models\Mentor;
 use App\Services\Admin\MentorService;
 use Illuminate\Http\RedirectResponse;
@@ -85,25 +86,49 @@ class MentorController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param string $id
+     * @return Response
      */
-    public function edit(string $id)
+    public function edit(string $id): Response
     {
-        //
+        $mentor = Mentor::findOrFail($id);
+
+        return Inertia::render('Admin/Mentor/Edit', [
+            'mentor' => $mentor,
+            'fields' => CourseType::getValues(),
+            'gender' => GenderEnum::getValues(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param UpdateMentorRequest $request
+     * @param string $id
+     * @return RedirectResponse
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateMentorRequest $request, string $id): RedirectResponse
     {
-        //
+        $isSuccess = $this->service->update($request, $id);
+
+        return $isSuccess
+            ? redirect()->route('admin.mentor.index')->with('success', 'Data Mentor berhasil diupdate!!')
+            : redirect()->back()->with('error', 'Data Mentor gagal diupdate!!');
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param string $id
+     * @return RedirectResponse
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
-        //
+        $isSuccess = $this->service->destroy($id);
+
+        return $isSuccess
+            ? redirect()->route('admin.mentor.index')->with('success', 'Data Mentor berhasil dihapus!!')
+            : redirect()->back()->with('error', 'Data Mentor gagal dihapus!!');
     }
 }
