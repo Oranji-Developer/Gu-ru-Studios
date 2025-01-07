@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->text('desc');
             $table->enum('rating', RatingEnum::getValues());
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

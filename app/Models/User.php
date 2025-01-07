@@ -44,6 +44,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    public function isProfilled(): bool
+    {
+        return $this->phone && $this->address;
+    }
+
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new SendVerificationEmail());

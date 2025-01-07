@@ -4,7 +4,7 @@ import {
     CarouselItem,
     CarouselPagination,
 } from "@/components/ui/carousel";
-import {cn} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
 
 interface WrapItemProps {
@@ -13,7 +13,7 @@ interface WrapItemProps {
     textWidth?: string;
 }
 
-const WrapItem = ({image, desc, textWidth}: WrapItemProps) => {
+const WrapItem: React.FC<WrapItemProps> = ({ image, desc, textWidth }) => {
     return (
         <div className="h-[calc(100vh-2rem)] relative rounded-[0.5rem] overflow-hidden">
             <img
@@ -39,7 +39,7 @@ const WrapItem = ({image, desc, textWidth}: WrapItemProps) => {
 
 const SliderImage = () => {
     return (
-        <Carousel plugins={[Autoplay({delay: 8000})]} opts={{loop: true}}>
+        <Carousel plugins={[Autoplay({ delay: 5000 })]} opts={{ loop: true }}>
             <CarouselContent>
                 <CarouselItem>
                     <WrapItem
@@ -61,7 +61,7 @@ const SliderImage = () => {
                     />
                 </CarouselItem>
             </CarouselContent>
-            <CarouselPagination/>
+            <CarouselPagination />
         </Carousel>
     );
 };
