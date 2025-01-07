@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Enum\Courses\StatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Mentor extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'mentors';
     protected $fillable = [
@@ -20,6 +22,15 @@ class Mentor extends Model
         'portfolio',
         'field',
     ];
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(function ($mentor) {
+            $mentor->course()->update(['status' => StatusEnum::INACTIVE->value]);
+        });
+    }
 
     public function course(): HasMany
     {

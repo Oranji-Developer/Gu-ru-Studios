@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('thumbnail', 150)->nullable();
             $table->enum('type', ContentType::getValues());
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
