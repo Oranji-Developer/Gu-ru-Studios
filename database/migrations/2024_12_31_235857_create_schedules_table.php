@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
             $table->date('start_date');
             $table->date('end_date');
+            $table->string('day');
             $table->time('start_time');
             $table->time('end_time');
             $table->integer('total_meet');

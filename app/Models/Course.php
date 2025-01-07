@@ -27,7 +27,7 @@ class Course extends Model
 
     public function mentor(): BelongsTo
     {
-        return $this->belongsTo(Mentor::class, 'mentor_id');
+        return $this->belongsTo(Mentor::class, 'mentor_id')->withTrashed();
     }
 
     public function schedule(): HasMany

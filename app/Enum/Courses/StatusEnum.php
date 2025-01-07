@@ -10,5 +10,4 @@ enum StatusEnum: string
 
     case ACTIVE = 'Aktif';
     case INACTIVE = 'Tidak Aktif';
-    case DELETED = 'Dihapus';
 }

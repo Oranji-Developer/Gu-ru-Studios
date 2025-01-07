@@ -11,4 +11,5 @@ enum StatusEnum: string
     case PAID = 'Lunas';
     case UNPAID = 'Belum Lunas';
     case CANCELED = 'Dibatalkan';
+    case COMPLETED = 'Selesai';
 }
