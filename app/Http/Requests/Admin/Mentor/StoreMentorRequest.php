@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\Mentor;
 
 use App\Enum\Courses\CourseType;
 use App\Enum\Users\GenderEnum;
+use App\Enum\Users\RoleEnum;
 use App\Trait\FileHandleTrait;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -18,7 +19,7 @@ class StoreMentorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->role === RoleEnum::ADMIN->value;
     }
 
     /**

@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Enum\Courses\CourseType;
 use App\Enum\Users\GenderEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreMentorRequest;
-use App\Http\Requests\Admin\UpdateMentorRequest;
+use App\Http\Requests\Admin\Mentor\StoreMentorRequest;
+use App\Http\Requests\Admin\Mentor\UpdateMentorRequest;
 use App\Models\Mentor;
 use App\Services\Admin\MentorService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
