@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import { router } from "@inertiajs/react";
 import { z } from "zod";
+import { handlingZodInputError } from "@/lib/utils/handlingInputError";
 
 export default function ResetPassword({
     token,
@@ -38,17 +39,7 @@ export default function ResetPassword({
                 },
             });
         } else {
-            for (const issue of dataParse.error.issues) {
-                if (
-                    errors[issue.path[0] as keyof typeof errors] === undefined
-                ) {
-                    errors[issue.path[0] as keyof typeof errors] =
-                        issue.message;
-                } else {
-                    errors[issue.path[0] as keyof typeof errors] +=
-                        ", " + issue.message;
-                }
-            }
+            handlingZodInputError(dataParse, errors);
             router.reload();
         }
     };

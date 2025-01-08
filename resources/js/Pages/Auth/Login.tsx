@@ -11,6 +11,7 @@ import { UserSchema } from "@/lib/schema/UserSchema";
 import GoogleIcon from "@/assets/svgr/google";
 import InputPassword from "@/components/InputPassword";
 import { router } from "@inertiajs/react";
+import { handlingZodInputError } from "@/lib/utils/handlingInputError";
 
 export default function Login({
     status,
@@ -41,17 +42,7 @@ export default function Login({
                 },
             });
         } else {
-            for (const issue of dataParse.error.issues) {
-                if (
-                    errors[issue.path[0] as keyof typeof errors] === undefined
-                ) {
-                    errors[issue.path[0] as keyof typeof errors] =
-                        issue.message;
-                } else {
-                    errors[issue.path[0] as keyof typeof errors] +=
-                        ", " + issue.message;
-                }
-            }
+            handlingZodInputError(dataParse, errors);
             router.reload();
         }
     };

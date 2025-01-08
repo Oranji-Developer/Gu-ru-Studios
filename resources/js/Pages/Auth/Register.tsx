@@ -11,6 +11,7 @@ import { UserSchema } from "@/lib/schema/UserSchema";
 import { z } from "zod";
 import GoogleIcon from "@/assets/svgr/google";
 import { router } from "@inertiajs/react";
+import { handlingZodInputError } from "@/lib/utils/handlingInputError";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<
@@ -35,17 +36,7 @@ export default function Register() {
                 onFinish: () => reset("password", "password_confirmation"),
             });
         } else {
-            for (const issue of dataParse.error.issues) {
-                if (
-                    errors[issue.path[0] as keyof typeof errors] === undefined
-                ) {
-                    errors[issue.path[0] as keyof typeof errors] =
-                        issue.message;
-                } else {
-                    errors[issue.path[0] as keyof typeof errors] +=
-                        ", " + issue.message;
-                }
-            }
+            handlingZodInputError(dataParse, errors);
             router.reload();
         }
     };

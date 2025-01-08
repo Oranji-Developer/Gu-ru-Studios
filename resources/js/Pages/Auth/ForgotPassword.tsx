@@ -9,6 +9,7 @@ import { Link } from "@inertiajs/react";
 import { z } from "zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import { router } from "@inertiajs/react";
+import { handlingZodInputError } from "@/lib/utils/handlingInputError";
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors, reset } = useForm<
@@ -29,17 +30,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 },
             });
         } else {
-            for (const issue of dataParse.error.issues) {
-                if (
-                    errors[issue.path[0] as keyof typeof errors] === undefined
-                ) {
-                    errors[issue.path[0] as keyof typeof errors] =
-                        issue.message;
-                } else {
-                    errors[issue.path[0] as keyof typeof errors] +=
-                        ", " + issue.message;
-                }
-            }
+            handlingZodInputError(dataParse, errors);
             router.reload();
         }
     };
@@ -82,11 +73,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                         <Button className="w-full" disabled={processing}>
                             Reset Password
                         </Button>
-                        <Link
-                            as="button"
-                            href={route("login")}
-                            className="w-full"
-                        >
+                        <Link href={route("login")} className="w-full">
                             <Button
                                 className="w-full text-gray-600"
                                 variant="outline"
