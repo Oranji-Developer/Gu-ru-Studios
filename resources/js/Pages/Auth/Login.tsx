@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import GoogleIcon from "@/assets/svgr/google";
 import InputPassword from "@/components/InputPassword";
+import { router } from "@inertiajs/react";
 
 export default function Login({
     status,
@@ -32,13 +33,26 @@ export default function Login({
         e.preventDefault();
 
         const dataParse = UserSchema.LOGIN.safeParse(data);
-        console.log(dataParse);
+
         if (dataParse.success) {
             post(route("login"), {
                 onFinish: () => {
                     reset();
                 },
             });
+        } else {
+            for (const issue of dataParse.error.issues) {
+                if (
+                    errors[issue.path[0] as keyof typeof errors] === undefined
+                ) {
+                    errors[issue.path[0] as keyof typeof errors] =
+                        issue.message;
+                } else {
+                    errors[issue.path[0] as keyof typeof errors] +=
+                        ", " + issue.message;
+                }
+            }
+            router.reload();
         }
     };
 
@@ -50,7 +64,10 @@ export default function Login({
                     <h1 className="text-[3.25rem] font-medium">Login</h1>
                     <p className="text-gray-500">
                         Belum Punya Akun?{" "}
-                        <Link href="register" className="underline text-black">
+                        <Link
+                            href={route("register")}
+                            className="rounded-md text-black underline hover:text-gray-400 focus:outline-none"
+                        >
                             buat akun
                         </Link>
                     </p>
@@ -93,7 +110,7 @@ export default function Login({
                         {canResetPassword && (
                             <Link
                                 href={route("password.request")}
-                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none"
                             >
                                 Lupa Password?
                             </Link>

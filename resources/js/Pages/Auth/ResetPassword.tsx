@@ -1,7 +1,4 @@
 import InputError from "@/components/InputError";
-import InputLabel from "@/components/InputLabel";
-import PrimaryButton from "@/components/PrimaryButton";
-import TextInput from "@/components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
@@ -34,10 +31,12 @@ export default function ResetPassword({
 
         let dataParse = UserSchema.FORGOTPASSWORD.safeParse(data);
 
-        console.log(dataParse);
-
         if (dataParse.success) {
-            post(route("password.store"));
+            post(route("password.store"), {
+                onFinish: () => {
+                    reset();
+                },
+            });
         } else {
             for (const issue of dataParse.error.issues) {
                 if (

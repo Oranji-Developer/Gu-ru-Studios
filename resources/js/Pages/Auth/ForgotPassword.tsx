@@ -1,6 +1,4 @@
 import InputError from "@/components/InputError";
-import PrimaryButton from "@/components/PrimaryButton";
-import TextInput from "@/components/TextInput";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +11,7 @@ import { UserSchema } from "@/lib/schema/UserSchema";
 import { router } from "@inertiajs/react";
 
 export default function ForgotPassword({ status }: { status?: string }) {
-    const { data, setData, post, processing, errors } = useForm<
+    const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.REQUESTFORGOTPASSWORD>
     >({
         email: "",
@@ -25,9 +23,12 @@ export default function ForgotPassword({ status }: { status?: string }) {
         let dataParse = UserSchema.REQUESTFORGOTPASSWORD.safeParse(data);
 
         if (dataParse.success) {
-            post(route("password.email"));
+            post(route("password.email"), {
+                onFinish: () => {
+                    reset();
+                },
+            });
         } else {
-            console.log(dataParse.error.issues);
             for (const issue of dataParse.error.issues) {
                 if (
                     errors[issue.path[0] as keyof typeof errors] === undefined

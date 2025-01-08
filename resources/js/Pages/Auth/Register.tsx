@@ -1,18 +1,19 @@
 import InputError from "@/components/InputError";
 import InputPassword from "@/components/InputPassword";
-import {Label} from "@/components/ui/label";
+import { Label } from "@/components/ui/label";
 import GuestLayout from "@/Layouts/GuestLayout";
-import {Head, Link, useForm} from "@inertiajs/react";
-import {FormEventHandler, useState} from "react";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {UserSchema} from "@/lib/schema/UserSchema";
-import {z} from "zod";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { FormEventHandler } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserSchema } from "@/lib/schema/UserSchema";
+import { z } from "zod";
 import GoogleIcon from "@/assets/svgr/google";
+import { router } from "@inertiajs/react";
 
 export default function Register() {
-    const {data, setData, post, processing, errors, reset} = useForm<
+    const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.REGISTER>
     >({
         resolver: zodResolver(UserSchema.REGISTER),
@@ -24,30 +25,34 @@ export default function Register() {
         },
     });
 
-    const [zodError, setZodError] = useState<string | null>(null);
-
     const submit: FormEventHandler = async (e) => {
         e.preventDefault();
 
         let dataParse = await UserSchema.REGISTER.safeParseAsync(data);
 
         if (dataParse.success) {
-            setZodError(null);
             post(route("register"), {
                 onFinish: () => reset("password", "password_confirmation"),
             });
         } else {
-            setZodError(
-                dataParse.error.errors.map((e) => e.message).join(", ")
-            );
-            setData("password", "");
-            setData("password_confirmation", "");
+            for (const issue of dataParse.error.issues) {
+                if (
+                    errors[issue.path[0] as keyof typeof errors] === undefined
+                ) {
+                    errors[issue.path[0] as keyof typeof errors] =
+                        issue.message;
+                } else {
+                    errors[issue.path[0] as keyof typeof errors] +=
+                        ", " + issue.message;
+                }
+            }
+            router.reload();
         }
     };
 
     return (
         <GuestLayout>
-            <Head title="Register"/>
+            <Head title="Register" />
 
             <section className="px-8 py-4 w-[calc(40vw-6rem)]">
                 <div className="mb-8">
@@ -58,11 +63,6 @@ export default function Register() {
                             Login aja
                         </Link>
                     </p>
-                </div>
-
-                {/* error for zod */}
-                <div className="mb-4 text-sm font-medium text-red-600">
-                    {zodError}
                 </div>
 
                 <form onSubmit={submit}>
@@ -77,7 +77,7 @@ export default function Register() {
                             onChange={(e) => setData("name", e.target.value)}
                         />
 
-                        <InputError message={errors.name} className="mt-2"/>
+                        <InputError message={errors.name} className="mt-2" />
                     </div>
                     <div className="mt-4">
                         <Label htmlFor="email">Email</Label>
@@ -90,7 +90,7 @@ export default function Register() {
                             onChange={(e) => setData("email", e.target.value)}
                         />
 
-                        <InputError message={errors.email} className="mt-2"/>
+                        <InputError message={errors.email} className="mt-2" />
                     </div>
 
                     <div className="mt-4">
@@ -131,8 +131,12 @@ export default function Register() {
                         <div className="bg-gray-300 h-0.5 rounded-full flex-auto"></div>
                     </div>
                     <a href={"oauth/google"} target="_blank">
-                        <Button variant="outline" className="w-full" type="button">
-                            <GoogleIcon className="w-6 h-6"/>
+                        <Button
+                            variant="outline"
+                            className="w-full"
+                            type="button"
+                        >
+                            <GoogleIcon className="w-6 h-6" />
                             Login dengan Google
                         </Button>
                     </a>

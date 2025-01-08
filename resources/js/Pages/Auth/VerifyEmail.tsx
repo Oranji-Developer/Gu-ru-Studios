@@ -1,7 +1,6 @@
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
-import { config, env } from "process";
 import { FormEventHandler } from "react";
 
 export default function VerifyEmail({ status }: { status?: string }) {
@@ -12,7 +11,8 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
         post(route("verification.send"));
     };
-    const page = usePage();
+
+    const user = usePage().props.auth.user;
 
     return (
         <GuestLayout>
@@ -24,9 +24,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
                 </h1>
                 <p className="font-medium mt-8">
                     Kami baru saja mengirimkan email verifikasi ke: <br />
-                    <span className="text-primary">
-                        [{page.props.auth.user.email}]
-                    </span>
+                    <span className="text-primary">[{user.email}]</span>
                 </p>
 
                 <p className="my-6">
