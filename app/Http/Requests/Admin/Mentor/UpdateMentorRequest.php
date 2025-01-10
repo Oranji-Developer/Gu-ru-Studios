@@ -72,6 +72,12 @@ class UpdateMentorRequest extends FormRequest
                 'bail',
                 Rule::in(CourseType::getValues())
             ],
+            'phone' => [
+                'bail',
+                'required',
+                'string',
+                'max:20'
+            ]
         ];
     }
 
@@ -91,6 +97,7 @@ class UpdateMentorRequest extends FormRequest
             'cv' => $this->input('cv'),
             'portfolio' => $this->input('portfolio'),
             'field' => $this->input('field'),
+            'phone' => $this->input('phone')
         ];
     }
 }
