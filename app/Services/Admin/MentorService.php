@@ -34,12 +34,14 @@ class MentorService extends CrudAbstract
 
             $old = Mentor::findOrFail($id);
 
-            $this->deleteFiles([
-                $old->profile_picture,
-                $old->cv
-            ]);
+            if (array_diff_assoc($data, $old->toArray())) {
+                $this->deleteFiles([
+                    $old->profile_picture,
+                    $old->cv
+                ]);
 
-            $old->update($data);
+                $old->update($data);
+            }
 
             Log::info("Mentor Updated");
             return true;
