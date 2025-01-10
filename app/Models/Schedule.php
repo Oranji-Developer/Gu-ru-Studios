@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $course_id
@@ -47,6 +47,7 @@ class Schedule extends Model
         'end_date',
         'start_time',
         'end_time',
+        'day',
         'total_meet'
     ];
 
