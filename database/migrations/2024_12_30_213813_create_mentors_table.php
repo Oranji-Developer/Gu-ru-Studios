@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->string('cv', 150)->nullable();
             $table->string('portfolio', 150)->nullable();
             $table->enum('field', CourseType::getValues());
+            $table->string('phone', 20)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
