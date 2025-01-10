@@ -22,6 +22,7 @@ class CourseFactory extends Factory
             'title' => $this->faker->sentence(),
             'desc' => $this->faker->paragraph(),
             'cost' => $this->faker->numberBetween(1000, 10000),
+            'capacity' => $this->faker->numberBetween(1, 100),
             'thumbnail' => 'default.png',
             'status' => $this->faker->randomElement(StatusEnum::getValues()),
         ];

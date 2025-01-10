@@ -76,7 +76,7 @@ class CourseController extends Controller
         $isSuccess = $this->service->store($request);
 
         return $isSuccess
-            ? redirect()->route('admin.courses.index')->with('success', 'Berhasil menambahkan data course!!')
+            ? redirect()->route('admin.course.index')->with('success', 'Berhasil menambahkan data course!!')
             : back()->with('error', 'Gagal menambahkan data course!!');
     }
 
@@ -117,7 +117,7 @@ class CourseController extends Controller
         $isSuccess = $this->service->update($request, $id);
 
         return $isSuccess
-            ? redirect()->route('admin.courses.index')->with('success', 'Berhasil mengubah data course!!')
+            ? redirect()->route('admin.course.index')->with('success', 'Berhasil mengubah data course!!')
             : back()->with('error', 'Gagal mengubah data course!!');
     }
 }
