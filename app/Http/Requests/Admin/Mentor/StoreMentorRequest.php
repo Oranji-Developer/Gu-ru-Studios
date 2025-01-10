@@ -75,6 +75,12 @@ class StoreMentorRequest extends FormRequest
                 'required',
                 Rule::in(CourseType::getValues())
             ],
+            'phone' => [
+                'bail',
+                'required',
+                'string',
+                'max:20'
+            ]
         ];
     }
 
@@ -94,6 +100,7 @@ class StoreMentorRequest extends FormRequest
             'cv' => $this->input('cv'),
             'portfolio' => $this->input('portfolio'),
             'field' => $this->input('field'),
+            'phone' => $this->input('phone'),
         ];
     }
 }
