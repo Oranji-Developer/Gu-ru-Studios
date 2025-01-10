@@ -4,14 +4,9 @@ namespace App\Trait;
 
 trait UpdateHandleTrait
 {
-    public function diff(array $oldData, array $newData): array
+    public function handleUpdate($model, array $newData, array $fileFields = []): void
     {
-        return array_diff_assoc($newData, $oldData);
-    }
-
-    public function handleUpdate($model, array $newData, array $fileFields = []): bool
-    {
-        $diffData = $this->diff($model->toArray(), $newData);
+        $diffData = array_diff_assoc($model->toArray(), $newData);
 
         if ($diffData) {
             foreach ($fileFields as $field) {
@@ -21,9 +16,6 @@ trait UpdateHandleTrait
             }
 
             $model->update($diffData);
-            return true;
         }
-
-        return false;
     }
 }
