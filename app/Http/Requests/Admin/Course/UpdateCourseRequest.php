@@ -66,9 +66,11 @@ class UpdateCourseRequest extends FormRequest
             ],
             'thumbnail' => [
                 'bail',
-                'image',
-                'mimes:jpg,jpeg,png',
-                'max:2048'
+                Rule::when(
+                    is_file($this->thumbnail),
+                    ['image', 'mimes:jpg,jpeg,png', 'max:2048'],
+                    ['string']
+                )
             ],
             'status' => [
                 'bail',
