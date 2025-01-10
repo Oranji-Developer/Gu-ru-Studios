@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['auth', 'verified', 'profiled']], function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('DashboardRole');
     })->name('dashboard');
 
     //just for test

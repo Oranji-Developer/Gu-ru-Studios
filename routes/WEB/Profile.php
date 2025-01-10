@@ -3,7 +3,7 @@
 use App\Http\Controllers\Customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth', 'verified', 'profiled', 'role:customer']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'profiled']], function () {
 
     Route::prefix('settings')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

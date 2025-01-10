@@ -15,11 +15,18 @@ import {
     NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { NavigationMenuItemProps } from "@radix-ui/react-navigation-menu";
 
 export default function Authenticated({
     header,
     children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+    navItems,
+    navResponsiveItems,
+}: PropsWithChildren<{
+    header?: ReactNode;
+    navItems?: ReactNode;
+    navResponsiveItems?: ReactNode;
+}>) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -30,40 +37,8 @@ export default function Authenticated({
             <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-16">
                     <div className="flex h-16 justify-between">
-                        <NavigationMenu>
-                            <NavigationMenuList>
-                                <NavigationMenuItem>
-                                    <NavLink
-                                        href={route("dashboard")}
-                                        active={route().current("dashboard")}
-                                    >
-                                        Overview
-                                    </NavLink>
-                                </NavigationMenuItem>
-                                <NavigationMenuItem>
-                                    <NavLink
-                                        href={route("profile.edit")}
-                                        active={
-                                            route().current("profile.edit") ||
-                                            route().current("account.edit")
-                                        }
-                                    >
-                                        Settings
-                                    </NavLink>
-                                </NavigationMenuItem>
-                            </NavigationMenuList>
-                        </NavigationMenu>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <Avatar>
-                                <AvatarImage
-                                    src={
-                                        "https://api.dicebear.com/9.x/big-ears-neutral/svg?seed=" +
-                                        user.email
-                                    }
-                                ></AvatarImage>
-                                <AvatarFallback>{user.name}</AvatarFallback>
-                            </Avatar>
+                        <div className="hidden sm:flex justify-between">
+                            {navItems}
                         </div>
 
                         <div className="-me-2 flex items-center sm:hidden">
@@ -115,14 +90,7 @@ export default function Authenticated({
                         " sm:hidden"
                     }
                 >
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                    </div>
+                    {navResponsiveItems}
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
                         <div className="px-4">
@@ -135,9 +103,6 @@ export default function Authenticated({
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route("profile.edit")}>
-                                Profile
-                            </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
                                 href={route("logout")}
@@ -158,7 +123,9 @@ export default function Authenticated({
                 </header>
             )}
 
-            <main>{children}</main>
+            <main className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-16 pt-6">
+                {children}
+            </main>
         </div>
     );
 }
