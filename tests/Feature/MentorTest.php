@@ -122,6 +122,7 @@ class MentorTest extends TestCase
             'address' => 'Test Address 123 Updated',
             'gender' => GenderEnum::MA->value,
             'desc' => 'Test Description',
+            'phone' => '081234567890',
             'profile_picture' => UploadedFile::fake()->image('profile.jpg'),
             'cv' => UploadedFile::fake()->create('document.pdf', 1024),
             'portfolio' => 'https://portfolio.test',

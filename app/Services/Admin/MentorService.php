@@ -5,12 +5,13 @@ namespace App\Services\Admin;
 use App\Models\Mentor;
 use App\Services\Abstracts\CrudAbstract;
 use App\Trait\FileHandleTrait;
+use App\Trait\UpdateHandleTrait;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class MentorService extends CrudAbstract
 {
-    use FileHandleTrait;
+    use FileHandleTrait, UpdateHandleTrait;
 
     public function store($request): bool
     {
@@ -30,18 +31,13 @@ class MentorService extends CrudAbstract
     public function update($request, ?int $id = null): bool
     {
         try {
-            $data = $request->getData();
+            $mentor = Mentor::findOrFail($id);
 
-            $old = Mentor::findOrFail($id);
-
-            if (array_diff_assoc($data, $old->toArray())) {
-                $this->deleteFiles([
-                    $old->profile_picture,
-                    $old->cv
-                ]);
-
-                $old->update($data);
-            }
+            $this->handleUpdate(
+                $mentor,
+                $request->getData(),
+                ['profile_picture', 'cv']
+            );
 
             Log::info("Mentor Updated");
             return true;
