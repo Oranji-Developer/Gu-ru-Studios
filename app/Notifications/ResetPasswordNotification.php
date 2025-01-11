@@ -16,7 +16,12 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    private string $token;
+    /**
+     * The password reset token.
+     *
+     * @var string
+     */
+    public string $token;
 
     /**
      * The callback that should be used to create the reset password URL.
