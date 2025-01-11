@@ -23,6 +23,7 @@ class MentorFactory extends Factory
             'address' => $this->faker->address(),
             'desc' => $this->faker->paragraph(),
             'gender' => $this->faker->randomElement(GenderEnum::getValues()),
+            'phone' => $this->faker->phoneNumber(),
             'profile_picture' => 'default.png',
             'cv' => 'default.pdf',
             'portfolio' => 'default.pdf',

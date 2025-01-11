@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $mentor_id
@@ -70,9 +71,9 @@ class Course extends Model
         return $this->belongsTo(Mentor::class, 'mentor_id')->withTrashed();
     }
 
-    public function schedule(): HasMany
+    public function schedule(): HasOne
     {
-        return $this->hasMany(Schedule::class, 'course_id');
+        return $this->hasOne(Schedule::class, 'course_id');
     }
 
     public function userCourse(): HasMany

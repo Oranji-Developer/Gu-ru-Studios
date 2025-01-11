@@ -76,21 +76,21 @@ class CourseController extends Controller
         $isSuccess = $this->service->store($request);
 
         return $isSuccess
-            ? redirect()->route('admin.courses.index')->with('success', 'Berhasil menambahkan data course!!')
+            ? redirect()->route('admin.course.index')->with('success', 'Berhasil menambahkan data course!!')
             : back()->with('error', 'Gagal menambahkan data course!!');
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified resource.
      *
      * @param string $id
      * @return Response
      */
-    public function show(string $id): Response
+    public function edit(string $id): Response
     {
         return Inertia::render('Admin/Course/Show', [
             'data' => Course::with([
-                'mentors:id,name',
+                'mentors:id,name,field',
                 'userCourse' => function ($query) {
                     $query->select(['id', 'course_id', 'children_id'])
                         ->with([
@@ -98,16 +98,11 @@ class CourseController extends Controller
                             'children.user:id,name'
                         ]);
                 }
-            ])->findOrFail($id)
+            ])->findOrFail($id),
+            'status' => StatusEnum::getValues(),
+            'academic_class' => AcademicClass::getValues(),
+            'art_class' => ArtsClass::getValues(),
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -122,7 +117,7 @@ class CourseController extends Controller
         $isSuccess = $this->service->update($request, $id);
 
         return $isSuccess
-            ? redirect()->route('admin.courses.index')->with('success', 'Berhasil mengubah data course!!')
+            ? redirect()->route('admin.course.index')->with('success', 'Berhasil mengubah data course!!')
             : back()->with('error', 'Gagal mengubah data course!!');
     }
 }

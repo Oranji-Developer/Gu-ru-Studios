@@ -27,16 +27,22 @@ class MentorController extends Controller
     public function index(): Response
     {
         $search = request('search', '');
+        $filter = request('filter', '');
 
         $mentors = Mentor::select('id', 'name', 'field')
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->when($filter, function ($query, $filter) {
+                return $query->where('field', $filter);
             })
             ->paginate(5);
 
         return Inertia::render('Admin/Mentor/Index', [
             'mentors' => $mentors,
             'search' => $search,
+            'filter' => $filter,
+            'fields' => CourseType::getValues(),
         ]);
     }
 
@@ -66,21 +72,6 @@ class MentorController extends Controller
         return $isSuccess
             ? redirect()->route('admin.mentor.index')->with('success', 'Mentor berhasil ditambahkan!!')
             : redirect()->back()->with('error', 'Mentor gagal ditambahkan!!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param string $id
-     * @return Response
-     */
-    public function show(string $id): Response
-    {
-        $mentor = Mentor::findOrFail($id);
-
-        return Inertia::render('Admin/Mentor/Show', [
-            'mentor' => $mentor
-        ]);
     }
 
     /**
