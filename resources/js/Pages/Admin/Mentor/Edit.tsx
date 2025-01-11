@@ -46,8 +46,18 @@ export default function Edit() {
         console.log(dataParse);
 
         if (dataParse.success) {
-            put(route("admin.mentor.update", { mentor: mentor.id }), {
-                forceFormData: true,
+            router.post(route("admin.mentor.update", { mentor: mentor.id }), {
+                _method: "put",
+                name: dataParse.data.name,
+                address: dataParse.data.address,
+                desc: dataParse.data.desc,
+                phone: dataParse.data.phone,
+                gender: dataParse.data.gender,
+                field: dataParse.data.field,
+                profile_picture: dataParse.data.profile_picture,
+                cv: dataParse.data.cv,
+                portfolio: dataParse.data.portfolio,
+                youtube: dataParse.data.youtube,
             });
         } else {
             handlingZodInputError(dataParse, errors);

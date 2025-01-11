@@ -3,6 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { router } from "@inertiajs/react";
+import { Mentor } from "@/types/Mentor";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import {
     AlertDialog,
@@ -18,16 +20,29 @@ import {
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Mentor = {
-    id: string;
-    name: string;
-    field: string;
-};
 
 export const columns: ColumnDef<Mentor>[] = [
     {
         accessorKey: "name",
         header: "Nama",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div className="flex gap-4 items-center px-2">
+                    <Avatar>
+                        <AvatarImage src={"/storage/" + data.profile_picture} />
+                        <AvatarFallback>
+                            {data.name.split("", 2)}
+                        </AvatarFallback>
+                    </Avatar>
+                    <h4 className="text-base">{data.name}</h4>
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: "phone",
+        header: "Telepon",
     },
     {
         accessorKey: "field",
