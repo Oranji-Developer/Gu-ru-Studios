@@ -36,7 +36,7 @@ class MentorService extends CrudAbstract
             $this->handleUpdate(
                 $mentor,
                 $request->getData(),
-                ['profile_picture', 'cv', 'portfolio']
+                ['profile_picture', 'cv']
             );
 
             Log::info("Mentor Updated");

@@ -14,7 +14,6 @@ trait FileHandleTrait
     private array $fileConfigs = [
         'profile_picture' => 'uploads/mentors/profile_picture',
         'cv' => 'uploads/mentors/cv',
-        'portfolio' => 'uploads/mentors/portfolio',
         'thumbnail' => 'uploads/thumbnail'
     ];
 

@@ -13,9 +13,7 @@ export class MentorSchema {
         cv: z.instanceof(File, {
             message: "CV must be a file",
         }),
-        portfolio: z.instanceof(File, {
-            message: "Portofolio must be a file",
-        }),
+        portfolio: z.string().min(10),
         phone: z.string(),
         youtube: z.string().optional(),
     });
@@ -38,12 +36,7 @@ export class MentorSchema {
             })
             .optional()
             .nullable(),
-        portfolio: z
-            .instanceof(File, {
-                message: "Portofolio must be a file",
-            })
-            .optional()
-            .nullable(),
+        portfolio: z.string().min(10).optional().nullable(),
         phone: z.string(),
         youtube: z.string().optional(),
     });

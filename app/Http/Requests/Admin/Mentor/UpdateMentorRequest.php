@@ -73,11 +73,7 @@ class UpdateMentorRequest extends FormRequest
             'portfolio' => [
                 'bail',
                 'nullable',
-                Rule::when(
-                    is_file($this->portfolio),
-                    ['mimes:jpg,jpeg,png,pdf', 'max:2048'],
-                    ['string']
-                )
+                'string'
             ],
             'field' => [
                 'bail',
