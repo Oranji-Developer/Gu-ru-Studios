@@ -45,7 +45,6 @@ class UserCourse extends Model
     protected $fillable = [
         'children_id',
         'course_id',
-        'subscription',
         'start_date',
         'end_date',
         'status',
