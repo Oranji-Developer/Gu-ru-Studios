@@ -32,6 +32,35 @@ trait FileHandleTrait
     }
 
     /**
+     * Handle multiple files upload
+     *
+     * @param string $field Field name (e.g., 'files')
+     * @param string $path Storage path
+     * @return void
+     */
+    function handleMultipleFiles(string $field, string $path): void
+    {
+        if ($this->hasFile($field)) {
+            $files = $this->file($field);
+            $uploadedFiles = [];
+
+            foreach ($files as $key => $file) {
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs($path, $fileName, 'public');
+
+                $uploadedFiles[$key] = [
+                    'name' => $fileName,
+                    'path' => $filePath
+                ];
+            }
+
+            $this->merge([
+                'files' => $uploadedFiles
+            ]);
+        }
+    }
+
+    /**
      * Process and store file
      *
      * @param string $field
