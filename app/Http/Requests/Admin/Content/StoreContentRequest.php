@@ -52,6 +52,11 @@ class StoreContentRequest extends FormRequest
                 'required',
                 Rule::in(ContentType::getValues())
             ],
+            'link' => [
+                'bail',
+                'nullable',
+                'url'
+            ],
             'files.*.file' => [
                 'bail',
                 'required',
@@ -77,6 +82,7 @@ class StoreContentRequest extends FormRequest
             'desc.required' => 'Deskripsi wajib diisi',
             'desc.string' => 'Deskripsi harus berupa huruf',
             'type.required' => 'Tipe wajib diisi',
+            'link.url' => 'Link harus berupa URL',
             'files.*.file.required' => 'File wajib diisi',
             'files.*.file.file' => 'File harus berupa file',
             'files.*.file.mimes' => 'File harus berupa file gambar (jpg, jpeg, png)',
@@ -97,6 +103,6 @@ class StoreContentRequest extends FormRequest
 
     public function getFiles(): array
     {
-        return $this->file('files');
+        return $this->input('files');
     }
 }

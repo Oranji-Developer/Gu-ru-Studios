@@ -44,14 +44,27 @@ class ContentService extends CrudAbstract
 
             $this->handleUpdate($content, $request->getData());
 
-            foreach ($request->getFiles() as $index => $file) {
-                $newFile = array_diff_assoc($file, $content->files[$index]->toArray());
+            $files = $request->getFiles();
 
-                if ($newFile) {
-                    $this->deleteFile($content->files[$index]->path);
-                    $content->files[$index]->update($newFile);
+            if (!is_null($files)) {
+                $newFileIds = array_column($files, 'id');
+
+                foreach ($content->files as $file) {
+                    if (!in_array($file->id, $newFileIds)) {
+                        $this->deleteFile($file->path);
+                        $file->delete();
+                    }
+                }
+
+                foreach ($request->getFiles() as $file) {
+                    if (isset($file['id'])) {
+                        $content->files()->where('id', $file['id'])->update($file);
+                    } else {
+                        $content->files()->create($file);
+                    }
                 }
             }
+
 
             DB::commit();
             Log::info('success update content');

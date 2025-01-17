@@ -2,6 +2,7 @@
 
 namespace App\Trait;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 trait FileHandleTrait
@@ -40,11 +41,16 @@ trait FileHandleTrait
      */
     function handleMultipleFiles(string $field, string $path): void
     {
-        if ($this->hasFile($field)) {
-            $files = $this->file($field);
+        if ($this->input($field)) {
+            $files = $this->input($field);
             $uploadedFiles = [];
 
-            foreach ($files as $key => $file) {
+            foreach ($files as $key => $fileData) {
+                if (!isset($fileData['file']) || !$fileData['file'] instanceof UploadedFile) {
+                    continue;
+                }
+
+                $file = $fileData['file'];
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs($path, $fileName, 'public');
 
@@ -52,6 +58,10 @@ trait FileHandleTrait
                     'name' => $fileName,
                     'path' => $filePath
                 ];
+
+                if (isset($fileData['id'])) {
+                    $uploadedFiles[$key]['id'] = $fileData['id'];
+                }
             }
 
             $this->merge([
