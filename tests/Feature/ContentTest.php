@@ -126,6 +126,15 @@ class ContentTest extends TestCase
             'files' => [
                 [
                     'file' => UploadedFile::fake()->image('updated_content.jpg')
+                ],
+                [
+                    'name' => 'Updated File',
+                    'path' => 'files/updated_file.jpg'
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'Updated File',
+                    'path' => 'files/updated_file.jpg'
                 ]
             ]
         ];
