@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Enum\Users\StatusEnum;
 use App\Models\UserCourse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class UserCourseObserver
 {
@@ -17,6 +18,7 @@ class UserCourseObserver
     public function retrieved(UserCourse $userCourse): void
     {
         if ($userCourse->end_date < Carbon::now()->toDateString() && $userCourse->status !== StatusEnum::COMPLETED->value) {
+            Log::info('Retrieved event fired for UserCourse', ['id' => $userCourse->id]);
             $userCourse->status = StatusEnum::COMPLETED->value;
             $userCourse->saveQuietly();
         }

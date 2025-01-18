@@ -10,6 +10,7 @@ use App\Models\UserCourse;
 use App\Enum\Users\RoleEnum;
 use App\Enum\Users\StatusEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class UserCourseTest extends TestCase
@@ -114,4 +115,19 @@ class UserCourseTest extends TestCase
             'status' => StatusEnum::COMPLETED->value,
         ]);
     }
+
+    public function test_user_course_observer_sets_status_to_completed(): void
+    {
+        $userCourse = UserCourse::factory()->create([
+            'course_id' => Course::factory()->create(['mentor_id' => Mentor::factory()->create()->id])->id,
+            'children_id' => Children::factory()->create(['user_id' => User::factory()->create()->id])->id,
+            'end_date' => Carbon::now()->subDays(4)->toDateString(),
+            'status' => StatusEnum::PAID->value,
+        ]);
+
+        $userCourse->refresh();
+
+        $this->assertEquals(StatusEnum::COMPLETED->value, $userCourse->status);
+    }
+
 }
