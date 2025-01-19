@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\UserCourseObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $children_id
@@ -37,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserCourse whereUpdatedAt($value)
  * @mixin \Eloquent
  */
+#[ObservedBy([UserCourseObserver::class])]
 class UserCourse extends Model
 {
     use HasFactory;
