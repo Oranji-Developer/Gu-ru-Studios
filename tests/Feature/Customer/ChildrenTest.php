@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature\Customer;
 
 use App\Enum\Courses\AcademicClass;
 use App\Enum\Users\GenderEnum;
