@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
+use App\Enum\Users\RoleEnum;
+use App\Enum\Users\StatusEnum;
 use App\Models\Children;
 use App\Models\Course;
 use App\Models\Mentor;
 use App\Models\User;
 use App\Models\UserCourse;
-use App\Enum\Users\RoleEnum;
-use App\Enum\Users\StatusEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
