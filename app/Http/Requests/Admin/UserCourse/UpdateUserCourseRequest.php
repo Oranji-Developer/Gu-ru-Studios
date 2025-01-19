@@ -30,7 +30,11 @@ class UpdateUserCourseRequest extends FormRequest
                 'required',
                 'string',
                 Rule::in(StatusEnum::getValues())
-            ]
+            ],
+            'report' => [
+                'string',
+                'url'
+            ],
         ];
     }
 
