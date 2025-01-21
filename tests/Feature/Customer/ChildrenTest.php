@@ -1,14 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Customer;
 
+use App\Enum\Courses\AcademicClass;
+use App\Enum\Users\GenderEnum;
+use App\Enum\Users\RoleEnum;
 use App\Models\Children;
 use App\Models\User;
-use App\Enum\Users\RoleEnum;
-use App\Enum\Users\GenderEnum;
-use App\Enum\Courses\AcademicClass;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ChildrenTest extends TestCase

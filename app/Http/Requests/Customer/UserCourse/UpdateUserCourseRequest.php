@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests\Admin\UserCourse;
+namespace App\Http\Requests\Customer\UserCourse;
 
-use App\Enum\Users\RoleEnum;
 use App\Enum\Users\StatusEnum;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -15,7 +14,7 @@ class UpdateUserCourseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->role === RoleEnum::ADMIN->value;
+        return true;
     }
 
     /**
@@ -27,14 +26,10 @@ class UpdateUserCourseRequest extends FormRequest
     {
         return [
             'status' => [
-                'required',
+                'bail',
                 'string',
                 Rule::in(StatusEnum::getValues())
-            ],
-            'report' => [
-                'string',
-                'url'
-            ],
+            ]
         ];
     }
 

@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('children_id')->constrained('children')->cascadeOnDelete();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
+            $table->string('report')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->enum('status', StatusEnum::getValues());
