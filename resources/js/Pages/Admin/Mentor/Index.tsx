@@ -1,6 +1,7 @@
 import { Head, router, usePage } from "@inertiajs/react";
 import { AdminLayout } from "@/Layouts/AdminLayout";
-import { columns, Mentor } from "./widgets/columns";
+import { Mentor } from "@/types/Mentor";
+import { columns } from "./widgets/columns";
 import { DataTable } from "./widgets/data-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
