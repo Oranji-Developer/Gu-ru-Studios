@@ -10,16 +10,20 @@ import { useState } from "react";
 import { Pagination } from "@/types/Pagination";
 
 export default function Index() {
-    const mentors = usePage().props.mentors as {
+    const page = usePage();
+    const fields = page.props.fields as string[];
+    const mentors = page.props.mentors as {
         data: Mentor[];
     } & Pagination;
 
     const [search, setSearch] = useState("");
+    const [type, setType] = useState("");
 
-    function searchMentor() {
+    function searchMentor(search?: string, filter?: string) {
         router.get(
             route("admin.mentor.index"),
             {
+                filter: filter,
                 search: search,
             },
             {
@@ -29,16 +33,34 @@ export default function Index() {
         );
     }
 
+    function selectType(type: string) {
+        setType(type);
+        setSearch("");
+        searchMentor("", type);
+    }
+
     return (
         <AdminLayout
             header={
-                <div>
-                    <h1 className="text-2xl font-semibold leading-[1.8rem]">
-                        Mentor
-                    </h1>
-                    <p className="text-sm leading-[1.05rem] text-gray-400">
-                        Manage your mentor here.
-                    </p>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-2xl font-semibold leading-[1.8rem]">
+                            Mentor
+                        </h1>
+                        <p className="text-sm leading-[1.05rem] text-gray-400">
+                            Manage your mentor here.
+                        </p>
+                    </div>
+                    <div className="">
+                        <Button
+                            onClick={() => {
+                                router.visit(route("admin.mentor.create"));
+                            }}
+                        >
+                            Add Mentor
+                            <PlusIcon />
+                        </Button>
+                    </div>
                 </div>
             }
         >
@@ -46,7 +68,34 @@ export default function Index() {
                 <Head title="Mentor" />
 
                 <div className="flex justify-between items-center mb-2">
-                    <div className=""></div>
+                    <div className="bg-gray-100 p-1 rounded-md inline-flex gap-1">
+                        <Button
+                            key="all"
+                            variant={!type ? "default" : "ghost"}
+                            type="button"
+                            className={`${!type ? "" : ""}`}
+                            onClick={() => selectType("")}
+                        >
+                            Semua
+                        </Button>
+                        {fields.map((element) => (
+                            <Button
+                                key={element}
+                                variant={element === type ? "default" : "ghost"}
+                                className={`${
+                                    element === type
+                                        ? ""
+                                        : "hover:text-gray-500"
+                                }`}
+                                type="button"
+                                onClick={() => {
+                                    selectType(element);
+                                }}
+                            >
+                                {element}
+                            </Button>
+                        ))}
+                    </div>
                     <div className="flex gap-4">
                         <div className="relative flex-grow">
                             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -59,19 +108,12 @@ export default function Index() {
                                     if (search === "") router.reload();
                                 }}
                                 onKeyDown={(e) => {
-                                    if (e.key === "Enter") searchMentor();
+                                    if (e.key === "Enter")
+                                        searchMentor(search, type);
                                 }}
                                 className="pl-10 pr-4 py-2 rounded-full w-full"
                             />
                         </div>
-                        <Button
-                            onClick={() => {
-                                router.visit(route("admin.mentor.create"));
-                            }}
-                        >
-                            Add Mentor
-                            <PlusIcon />
-                        </Button>
                     </div>
                 </div>
                 <DataTable
