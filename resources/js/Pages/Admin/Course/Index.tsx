@@ -19,6 +19,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { Pagination } from "@/types/Pagination";
 
 export default function Index() {
     const page = usePage().props;
@@ -27,19 +28,7 @@ export default function Index() {
 
     const courses = page.data as {
         data: Course[];
-        current_page: number;
-        first_page_url: string;
-        last_page_url: string;
-        links: {
-            url: string;
-            label: string;
-            active: boolean;
-        }[];
-        from: number;
-        to: number;
-        total: number;
-        per_page: number;
-    };
+    } & Pagination;
 
     const [filter, setFilter] = useState(activeStatus);
 

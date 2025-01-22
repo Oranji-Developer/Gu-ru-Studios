@@ -2,28 +2,17 @@ import { Head, router, usePage } from "@inertiajs/react";
 import { AdminLayout } from "@/Layouts/AdminLayout";
 import { Mentor } from "@/types/Mentor";
 import { columns } from "./widgets/columns";
-import { DataTable } from "./widgets/data-table";
+import { DataTable } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import { Pagination } from "@/types/Pagination";
 
 export default function Index() {
     const mentors = usePage().props.mentors as {
         data: Mentor[];
-        current_page: number;
-        first_page_url: string;
-        last_page_url: string;
-        links: {
-            url: string;
-            label: string;
-            active: boolean;
-        }[];
-        from: number;
-        to: number;
-        total: number;
-        per_page: number;
-    };
+    } & Pagination;
 
     const [search, setSearch] = useState("");
 
