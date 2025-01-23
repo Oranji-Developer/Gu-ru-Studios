@@ -25,20 +25,23 @@ export default function Index() {
     const page = usePage().props;
     const status = page.statusFields as string[];
     const activeStatus = page.status as string;
+    const courseType = page.course_type as string[];
 
     const courses = page.data as {
         data: Course[];
     } & Pagination;
 
     const [filter, setFilter] = useState(activeStatus);
-
+    const [type, setType] = useState("");
     const [search, setSearch] = useState("");
 
-    function searchCourse() {
+    function searchCourse(search?: string, filter?: string, status?: string) {
         router.get(
             route("admin.course.index"),
             {
                 search: search,
+                filter: filter,
+                status: status,
             },
             {
                 preserveState: true,
@@ -52,35 +55,71 @@ export default function Index() {
     }
 
     function filterStatus() {
-        router.get(
-            route("admin.course.index"),
-            {
-                status: filter,
-            },
-            {
-                preserveState: true,
-                replace: true,
-            }
-        );
+        searchCourse(search, type, filter);
+    }
+
+    function selectType(type: string) {
+        setType(type);
+        setSearch("");
+        searchCourse("", type);
     }
 
     return (
         <AdminLayout
             header={
-                <>
-                    <h1 className="text-2xl font-semibold leading-[1.8rem]">
-                        Course
-                    </h1>
-                    <p className="text-sm leading-[1.05rem] text-gray-400">
-                        Manage your course here.
-                    </p>
-                </>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-2xl font-semibold leading-[1.8rem]">
+                            Course
+                        </h1>
+                        <p className="text-sm leading-[1.05rem] text-gray-400">
+                            Manage your course here.
+                        </p>
+                    </div>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                router.visit(route("admin.course.create"));
+                            }}
+                        >
+                            Add Course
+                            <PlusIcon />
+                        </Button>
+                    </div>
+                </div>
             }
         >
             <Head title="Course" />
             <section>
                 <div className="flex justify-between items-center mb-2">
-                    <div className=""></div>
+                    <div className="bg-gray-100 p-1 rounded-md inline-flex gap-1">
+                        <Button
+                            key="all"
+                            variant={!type ? "default" : "ghost"}
+                            type="button"
+                            className={`${!type ? "" : ""}`}
+                            onClick={() => selectType("")}
+                        >
+                            Semua
+                        </Button>
+                        {courseType.map((element) => (
+                            <Button
+                                key={element}
+                                variant={element === type ? "default" : "ghost"}
+                                className={`${
+                                    element === type
+                                        ? ""
+                                        : "hover:text-gray-500"
+                                }`}
+                                type="button"
+                                onClick={() => {
+                                    selectType(element);
+                                }}
+                            >
+                                {element}
+                            </Button>
+                        ))}
+                    </div>
                     <div className="flex gap-4">
                         <div className="data-filter flex gap-2">
                             <div className="relative flex-grow">
@@ -94,7 +133,8 @@ export default function Index() {
                                         if (search === "") router.reload();
                                     }}
                                     onKeyDown={(e) => {
-                                        if (e.key === "Enter") searchCourse();
+                                        if (e.key === "Enter")
+                                            searchCourse(search, type);
                                     }}
                                     className="pl-10 pr-4 py-2 rounded-full w-full"
                                 />
@@ -177,14 +217,6 @@ export default function Index() {
                                 </Popover>
                             </div>
                         </div>
-                        <Button
-                            onClick={() => {
-                                router.visit(route("admin.course.create"));
-                            }}
-                        >
-                            Add Course
-                            <PlusIcon />
-                        </Button>
                     </div>
                 </div>
                 <DataTable
