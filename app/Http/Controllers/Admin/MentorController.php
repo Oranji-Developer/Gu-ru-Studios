@@ -29,7 +29,7 @@ class MentorController extends Controller
         $search = request('search', '');
         $filter = request('filter', '');
 
-        $mentors = Mentor::select('id', 'name', 'field')
+        $mentors = Mentor::select(['id', 'name', 'field', 'profile_picture', 'phone'])
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', '%' . $search . '%');
             })
