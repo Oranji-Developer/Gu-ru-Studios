@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Enum\Courses\AcademicClass;
+use App\Enum\Courses\CourseType;
 use App\Enum\Courses\StatusEnum;
 use App\Enum\Users\RoleEnum;
-use App\Enum\Courses\CourseType;
-use App\Models\User;
-use App\Models\Mentor;
 use App\Models\Course;
+use App\Models\Mentor;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

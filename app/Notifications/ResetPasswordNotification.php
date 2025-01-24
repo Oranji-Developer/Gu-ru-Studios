@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Carbon\Carbon;
+use Closure;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -16,21 +17,26 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    private string $token;
+    /**
+     * The password reset token.
+     *
+     * @var string
+     */
+    public string $token;
 
     /**
      * The callback that should be used to create the reset password URL.
      *
-     * @var \Closure|null
+     * @var Closure|null
      */
-    public static $createUrlCallback;
+    public static ?Closure $createUrlCallback;
 
     /**
      * The callback that should be used to build the mail message.
      *
-     * @var \Closure|null
+     * @var Closure|null
      */
-    public static $toMailCallback;
+    public static ?Closure $toMailCallback;
 
     /**
      * Create a new notification instance.
@@ -58,7 +64,7 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return string
      */
-    protected function resetUrl($notifiable)
+    protected function resetUrl(mixed $notifiable): string
     {
         if (static::$createUrlCallback) {
             return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
@@ -103,10 +109,10 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     /**
      * Set a callback that should be used when creating the reset password button URL.
      *
-     * @param  \Closure  $callback
+     * @param Closure $callback
      * @return void
      */
-    public static function createUrlUsing($callback)
+    public static function createUrlUsing(Closure $callback): void
     {
         static::$createUrlCallback = $callback;
     }
@@ -114,10 +120,10 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     /**
      * Set a callback that should be used when building the notification mail message.
      *
-     * @param  \Closure  $callback
+     * @param Closure $callback
      * @return void
      */
-    public static function toMailUsing($callback)
+    public static function toMailUsing(Closure $callback): void
     {
         static::$toMailCallback = $callback;
     }

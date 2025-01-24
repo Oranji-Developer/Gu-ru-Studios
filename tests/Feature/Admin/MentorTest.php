@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Enum\Courses\CourseType;
 use App\Enum\Users\GenderEnum;
@@ -8,7 +8,6 @@ use App\Enum\Users\RoleEnum;
 use App\Models\Mentor;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;

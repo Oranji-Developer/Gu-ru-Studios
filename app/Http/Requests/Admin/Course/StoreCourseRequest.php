@@ -8,6 +8,8 @@ use App\Enum\Courses\CourseType;
 use App\Enum\Courses\StatusEnum;
 use App\Enum\Users\RoleEnum;
 use App\Trait\FileHandleTrait;
+use Carbon\Carbon;
+use Illuminate\Validation\Validator;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -67,11 +69,6 @@ class StoreCourseRequest extends FormRequest
                 'required',
                 Rule::in(CourseType::getValues())
             ],
-            'class' => [
-                'bail',
-                'required',
-                Rule::in(array_merge(AcademicClass::getValues(), ArtsClass::getValues()))
-            ],
             'thumbnail' => [
                 'bail',
                 'required',
@@ -98,7 +95,8 @@ class StoreCourseRequest extends FormRequest
             'day' => [
                 'bail',
                 'required',
-                'string'
+                'array',
+                Rule::in(['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'])
             ],
             'start_time' => [
                 'bail',
@@ -125,6 +123,36 @@ class StoreCourseRequest extends FormRequest
         $this->handle();
     }
 
+    protected function after(): array
+    {
+        return [
+
+            function (Validator $validator) {
+                if ($this->input('course_type') !== CourseType::ABK->value) {
+                    if ($this->input('class') === null) {
+                        $validator->errors()->add('class', 'The class field is required for course type');
+                    } else {
+                        if ($this->input('course_type') === CourseType::ACADEMIC->value) {
+                            if (!in_array($this->input('class'), AcademicClass::getValues())) {
+                                $validator->errors()->add('class', 'The class field is invalid for AcademicClass');
+                            } else {
+                                $this->merge(['class' => AcademicClass::from($this->input('class'))->value]);
+                            }
+                        } else {
+                            if (!in_array($this->input('class'), ArtsClass::getValues())) {
+                                $validator->errors()->add('class', 'The class field is invalid for ArtsClass');
+                            } else {
+                                $this->merge(['class' => ArtsClass::from($this->input('class'))->value]);
+                            }
+                        }
+                    }
+                }
+            }
+        ];
+    }
+
+
+
     public function getCourse(): array
     {
         return [
@@ -144,9 +172,9 @@ class StoreCourseRequest extends FormRequest
     public function getSchedule(): array
     {
         return [
-            'start_date' => $this->input('start_date'),
-            'end_date' => $this->input('end_date'),
-            'day' => $this->input('day'),
+            'start_date' => Carbon::parse($this->input('start_date'))->format('Y-m-d'),
+            'end_date' => Carbon::parse($this->input('end_date'))->format('Y-m-d'),
+            'day' => implode(',', $this->input('day')),
             'start_time' => $this->input('start_time'),
             'end_time' => $this->input('end_time'),
             'total_meet' => $this->input('total_meet')

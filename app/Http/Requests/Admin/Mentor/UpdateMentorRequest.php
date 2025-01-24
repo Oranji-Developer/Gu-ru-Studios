@@ -32,24 +32,29 @@ class UpdateMentorRequest extends FormRequest
         return [
             'name' => [
                 'bail',
+                'nullable',
                 'string',
                 'max:100'
             ],
             'address' => [
                 'bail',
+                'nullable',
                 'string',
                 'max:255'
             ],
             'gender' => [
                 'bail',
+                'nullable',
                 Rule::in(GenderEnum::getValues())
             ],
             'desc' => [
                 'bail',
+                'nullable',
                 'string',
             ],
             'profile_picture' => [
                 'bail',
+                'nullable',
                 Rule::when(
                     is_file($this->profile_picture),
                     ['image', 'mimes:jpg,jpeg,png', 'max:2048'],
@@ -58,6 +63,7 @@ class UpdateMentorRequest extends FormRequest
             ],
             'cv' => [
                 'bail',
+                'nullable',
                 Rule::when(
                     is_file($this->cv),
                     ['mimes:jpg,jpeg,png,pdf', 'max:2048'],
@@ -66,15 +72,17 @@ class UpdateMentorRequest extends FormRequest
             ],
             'portfolio' => [
                 'bail',
+                'nullable',
                 'string'
             ],
             'field' => [
                 'bail',
+                'nullable',
                 Rule::in(CourseType::getValues())
             ],
             'phone' => [
                 'bail',
-                'required',
+                'nullable',
                 'string',
                 'max:20'
             ]

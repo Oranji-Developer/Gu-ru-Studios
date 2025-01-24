@@ -1,4 +1,3 @@
-import ResetPassword from "@/Pages/Auth/ResetPassword";
 import { z, ZodType } from "zod";
 
 export class UserSchema {
