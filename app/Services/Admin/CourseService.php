@@ -36,7 +36,9 @@ class CourseService extends CrudAbstract
     {
         try {
             DB::beginTransaction();
-            $course = Course::with('schedule')->findOrFail($id);
+            $course = Course::with(['schedule' => function ($query) {
+                $query->latest()->first();
+            }])->findOrFail($id);
 
             $this->handleUpdate($course, $request->getCourse(), ['thumbnail']);
 
