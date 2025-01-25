@@ -118,6 +118,34 @@ class UpdateCourseRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'day.required' => 'Hari harus diisi',
+            'day.array' => 'Hari harus berupa array',
+            'day.in' => 'Hari harus berupa nama hari',
+            'start_time.date_format' => 'Waktu mulai harus berupa format H:i',
+            'end_time.date_format' => 'Waktu selesai harus berupa format H:i',
+            'end_time.after' => 'Waktu selesai harus setelah waktu mulai',
+            'total_meet.integer' => 'Total pertemuan harus berupa angka',
+            'total_meet.min' => 'Total pertemuan minimal 1',
+            'mentor_id.exists' => 'Mentor tidak ditemukan',
+            'title.string' => 'Judul harus berupa huruf',
+            'title.max' => 'Judul maksimal berukuran 100 karakter',
+            'desc.string' => 'Deskripsi harus berupa huruf',
+            'capacity.integer' => 'Kapasitas harus berupa angka',
+            'capacity.min' => 'Kapasitas minimal 1',
+            'course_type.in' => 'Tipe kursus tidak valid',
+            'class.in' => 'Kelas tidak valid',
+            'thumbnail.image' => 'Thumbnail harus berupa gambar',
+            'thumbnail.max' => 'Thumbnail maksimal berukuran 2MB',
+            'status.in' => 'Status tidak valid',
+            'start_date.date' => 'Tanggal mulai harus berupa tanggal',
+            'end_date.date' => 'Tanggal selesai harus berupa tanggal',
+            'end_date.after' => 'Tanggal selesai harus setelah tanggal mulai',
+        ];
+    }
+
     protected function passedValidation(): void
     {
         $this->handle();
