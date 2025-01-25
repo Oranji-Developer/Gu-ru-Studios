@@ -69,6 +69,17 @@ class StoreCourseRequest extends FormRequest
                 'required',
                 Rule::in(CourseType::getValues())
             ],
+            'class' => [
+                'bail',
+                Rule::when($this->input('course_type') !== CourseType::ABK->value, [
+                    'required',
+                    Rule::in(
+                        $this->input('course_type') === CourseType::ACADEMIC->value
+                            ? AcademicClass::getValues()
+                            : ArtsClass::getValues()
+                    )
+                ])
+            ],
             'thumbnail' => [
                 'bail',
                 'required',
@@ -122,36 +133,6 @@ class StoreCourseRequest extends FormRequest
     {
         $this->handle();
     }
-
-    protected function after(): array
-    {
-        return [
-
-            function (Validator $validator) {
-                if ($this->input('course_type') !== CourseType::ABK->value) {
-                    if ($this->input('class') === null) {
-                        $validator->errors()->add('class', 'The class field is required for course type');
-                    } else {
-                        if ($this->input('course_type') === CourseType::ACADEMIC->value) {
-                            if (!in_array($this->input('class'), AcademicClass::getValues())) {
-                                $validator->errors()->add('class', 'The class field is invalid for AcademicClass');
-                            } else {
-                                $this->merge(['class' => AcademicClass::from($this->input('class'))->value]);
-                            }
-                        } else {
-                            if (!in_array($this->input('class'), ArtsClass::getValues())) {
-                                $validator->errors()->add('class', 'The class field is invalid for ArtsClass');
-                            } else {
-                                $this->merge(['class' => ArtsClass::from($this->input('class'))->value]);
-                            }
-                        }
-                    }
-                }
-            }
-        ];
-    }
-
-
 
     public function getCourse(): array
     {
