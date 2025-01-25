@@ -24,6 +24,7 @@ class ScheduleFactory extends Factory
         return [
             'day' => $this->faker->randomElement(['Senin, Selasa, Rabu', 'Kamis, Jumat, Sabtu', 'Senin,Kamis', 'Selasa, Jumat']),
             'start_time' => $startTime,
+            'day' => $this->faker->randomElement(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']),
             'end_time' => $endTime,
             'start_date' => $startDate,
             'end_date' => $endDate,

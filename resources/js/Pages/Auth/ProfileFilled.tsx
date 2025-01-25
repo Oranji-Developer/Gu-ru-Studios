@@ -1,6 +1,6 @@
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormEventHandler } from "react";
@@ -8,7 +8,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import InputError from "@/components/InputError";
-import { useState } from "react";
+import { router } from "@inertiajs/react";
+import { handlingZodInputError } from "@/lib/utils/handlingInputError";
 
 export default function Profilled({ status }: { status?: string }) {
     const page = usePage();
@@ -23,8 +24,6 @@ export default function Profilled({ status }: { status?: string }) {
         address: "",
     });
 
-    const [zodError, setZodError] = useState<string | null>(null);
-
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
@@ -36,9 +35,8 @@ export default function Profilled({ status }: { status?: string }) {
                 },
             });
         } else {
-            setZodError(
-                dataParse.error.errors.map((e) => e.message).join(", ")
-            );
+            handlingZodInputError(dataParse, errors);
+            router.reload();
         }
     };
 
@@ -61,10 +59,6 @@ export default function Profilled({ status }: { status?: string }) {
                         Gagal update data diri kamu
                     </div>
                 )}
-
-                <div className="mb-4 text-sm font-medium text-red-600">
-                    {zodError}
-                </div>
 
                 <form onSubmit={submit}>
                     <div className="mt-2">

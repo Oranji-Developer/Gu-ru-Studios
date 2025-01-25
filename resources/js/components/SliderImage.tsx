@@ -43,19 +43,19 @@ const SliderImage = () => {
             <CarouselContent>
                 <CarouselItem>
                     <WrapItem
-                        image="images/shelf.jpeg"
+                        image="/images/shelf.jpeg"
                         desc="Guru terbaik untuk anak anda"
                     />
                 </CarouselItem>
                 <CarouselItem>
                     <WrapItem
-                        image="images/stationery.jpeg"
+                        image="/images/stationery.jpeg"
                         desc="Guru terbaik untuk anak anda"
                     />
                 </CarouselItem>
                 <CarouselItem>
                     <WrapItem
-                        image="images/blackboy.jpeg"
+                        image="/images/blackboy.jpeg"
                         desc="Dengan guru yang profesional dan berpengalaman"
                         textWidth="w-8/12"
                     />

@@ -56,10 +56,31 @@ export class UserSchema {
             if (data.password !== data.password_confirmation) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
+                    path: ["password_confirmation"],
                     message: "Password and password confirmation must match",
                 });
             }
 
             return data;
         });
+
+    static readonly FORGOTPASSWORD: ZodType = z
+        .object({
+            password: z.string().min(6),
+            password_confirmation: z.string().min(6),
+        })
+        .superRefine((data, ctx) => {
+            if (data.password !== data.password_confirmation) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ["password_confirmation"],
+                    message: "Password and password confirmation must match",
+                });
+            }
+            return data;
+        });
+
+    static readonly REQUESTFORGOTPASSWORD: ZodType = z.object({
+        email: z.string().email().max(100),
+    });
 }

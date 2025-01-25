@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('desc');
             $table->string('thumbnail', 150)->nullable();
             $table->enum('type', ContentType::getValues());
+            $table->string('link')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

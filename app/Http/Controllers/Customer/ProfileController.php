@@ -15,11 +15,8 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    private ProfileService $service;
-
-    public function __construct(ProfileService $service)
+    public function __construct(private readonly ProfileService $service)
     {
-        $this->service = $service;
     }
 
     /**
@@ -64,6 +61,4 @@ class ProfileController extends Controller
             ? Redirect::route('account.edit')->with('status', 'Account berhasil diperbarui!')
             : Redirect::back()->with('error', 'Account gagal diperbarui!');
     }
-
-
 }

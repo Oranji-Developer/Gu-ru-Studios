@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'profiled' => \App\Http\Middleware\EnsureProfileIsFilled::class,
+            'role' => \App\Http\Middleware\RoleAccessMiddleware::class,
         ]);
 
         //

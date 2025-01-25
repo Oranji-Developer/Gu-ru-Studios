@@ -53,7 +53,6 @@ class SendVerificationEmail extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage|null
     {
         try {
-
             $verificationUrl = $this->verificationUrl($notifiable);
 
             Log::info('Sending verification email to: ' . $notifiable->email);

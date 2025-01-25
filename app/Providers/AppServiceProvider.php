@@ -30,7 +30,15 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('can-update', function ($user, $model) {
-            return $user->users_id === $model->users_id;
+            return $user->id === $model->user_id;
+        });
+
+        Gate::define('can-view', function ($user, $model) {
+            return $user->id === $model->user_id;
+        });
+
+        Gate::define('can-delete', function ($user, $model) {
+            return $user->id === $model->user_id;
         });
 
         if (env('APP_ENV') == 'production') {

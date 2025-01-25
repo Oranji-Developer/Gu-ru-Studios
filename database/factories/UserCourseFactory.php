@@ -22,7 +22,6 @@ class UserCourseFactory extends Factory
 
         return [
             'course_id' => $this->faker->randomElement($course),
-            'subscription' => $this->faker->sentence(),
             'start_date' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
             'end_date' => $this->faker->dateTimeBetween('+1 month', '+2 month'),
             'status' => $this->faker->randomElement(StatusEnum::getValues()),
