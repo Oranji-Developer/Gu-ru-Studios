@@ -1,15 +1,15 @@
-import { AdminLayout } from "@/Layouts/AdminLayout";
-import { Head, usePage } from "@inertiajs/react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {AdminLayout} from "@/Layouts/AdminLayout";
+import {Head, usePage} from "@inertiajs/react";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
 import InputError from "@/components/InputError";
-import { useForm } from "@inertiajs/react";
-import { z } from "zod";
-import { CourseSchema } from "@/lib/schema/CourseSchema";
-import { Mentor } from "@/types/Mentor";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {useForm} from "@inertiajs/react";
+import {z} from "zod";
+import {CourseSchema} from "@/lib/schema/CourseSchema";
+import {Mentor} from "@/types/Mentor";
+import {Textarea} from "@/components/ui/textarea";
+import {Checkbox} from "@/components/ui/checkbox";
+import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {
     Select,
     SelectContent,
@@ -17,28 +17,28 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { DragDropPhoto } from "@/components/DragDropPhoto";
+import {DragDropPhoto} from "@/components/DragDropPhoto";
 
-import { Calendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
+import {Calendar} from "@/components/ui/calendar";
+import {Button} from "@/components/ui/button";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { TimePicker } from "@/components/ui/time-picker";
-import { DateRange } from "react-day-picker";
-import { format, addDays } from "date-fns";
-import { cn } from "@/lib/utils";
-import { CalendarIcon } from "@heroicons/react/24/solid";
-import { router } from "@inertiajs/react";
-import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import {TimePicker} from "@/components/ui/time-picker";
+import {DateRange} from "react-day-picker";
+import {format, addDays} from "date-fns";
+import {cn} from "@/lib/utils";
+import {CalendarIcon} from "@heroicons/react/24/solid";
+import {router} from "@inertiajs/react";
+import {handlingZodInputError} from "@/lib/utils/handlingInputError";
 
-import { useEffect, useState } from "react";
-import { FormEventHandler } from "react";
-import { Course } from "@/types/Course";
-import { title } from "process";
+import {useEffect, useState} from "react";
+import {FormEventHandler} from "react";
+import {Course} from "@/types/Course";
+import {title} from "process";
 
 export default function Edit() {
     const page = usePage();
@@ -73,7 +73,7 @@ export default function Edit() {
         "Minggu",
     ];
 
-    const { data, setData, post, processing, errors } = useForm<
+    const {data, setData, post, processing, errors} = useForm<
         z.infer<typeof CourseSchema.UPDATE>
     >({
         _method: "put",
@@ -145,7 +145,7 @@ export default function Edit() {
         const dataParse = CourseSchema.UPDATE.safeParse(data);
 
         if (dataParse.success) {
-            post(route("admin.course.update", { course: dataFetch.id }), {
+            post(route("admin.course.update", {course: dataFetch.id}), {
                 forceFormData: true,
             });
         } else {
@@ -167,7 +167,7 @@ export default function Edit() {
                 </div>
             }
         >
-            <Head title="Create Course" />
+            <Head title="Create Course"/>
             <form onSubmit={submit} className="pb-10">
                 <section className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2">
                     <div className="">
@@ -206,7 +206,7 @@ export default function Edit() {
                                 }}
                             >
                                 <SelectTrigger className="">
-                                    <SelectValue placeholder="Mentor" />
+                                    <SelectValue placeholder="Mentor"/>
                                 </SelectTrigger>
                                 <SelectContent>
                                     {mentors.map((mentor) => (
@@ -252,7 +252,7 @@ export default function Edit() {
                                             !date && "text-muted-foreground"
                                         )}
                                     >
-                                        <CalendarIcon />
+                                        <CalendarIcon/>
                                         {date?.from ? (
                                             date.to ? (
                                                 <>
@@ -297,13 +297,13 @@ export default function Edit() {
                             <Label>Hari</Label>
                             <div className="grid grid-cols-3 gap-2">
                                 {days.map((day) => (
-                                    <div
-                                        className={cn(
-                                            "flex items-center space-x-2 p-2 border rounded-md",
-                                            data.day?.includes(day) &&
-                                                "bg-primary-foreground text-primary border-primary"
-                                        )}
-                                        key={day}
+                                    <Label htmlFor={day}
+                                           className={cn(
+                                               "flex items-center space-x-2 p-2 border rounded-md",
+                                               data.day?.includes(day) &&
+                                               "bg-primary-foreground text-primary border-primary"
+                                           )}
+                                           key={day}
                                     >
                                         <Checkbox
                                             id={day}
@@ -312,23 +312,23 @@ export default function Edit() {
                                             onCheckedChange={(checked) => {
                                                 checked
                                                     ? setData("day", [
-                                                          ...data.day,
-                                                          day,
-                                                      ])
+                                                        ...data.day,
+                                                        day,
+                                                    ])
                                                     : setData(
-                                                          "day",
-                                                          data.day.filter(
-                                                              (d: string) =>
-                                                                  d !== day
-                                                          )
-                                                      );
+                                                        "day",
+                                                        data.day.filter(
+                                                            (d: string) =>
+                                                                d !== day
+                                                        )
+                                                    );
                                             }}
                                         />
                                         <Label htmlFor={day}>{day}</Label>
-                                    </div>
+                                    </Label>
                                 ))}
                             </div>
-                            <InputError message={errors.day} className="mt-2" />
+                            <InputError message={errors.day} className="mt-2"/>
                         </div>
                         <div>
                             <Label htmlFor="time">Waktu</Label>
@@ -340,7 +340,7 @@ export default function Edit() {
                                             className={cn(
                                                 "w-full justify-start text-left font-normal",
                                                 !data.time_start &&
-                                                    "text-muted-foreground"
+                                                "text-muted-foreground"
                                             )}
                                         >
                                             {data.time_start
@@ -364,7 +364,7 @@ export default function Edit() {
                                             className={cn(
                                                 "w-full justify-start text-left font-normal",
                                                 !data.time_end &&
-                                                    "text-muted-foreground"
+                                                "text-muted-foreground"
                                             )}
                                         >
                                             {data.time_end
@@ -461,13 +461,13 @@ export default function Edit() {
                                 className="flex w-full gap-5"
                             >
                                 {course_type.map((element) => (
-                                    <div
-                                        key={element}
-                                        className={`rounded-full focus:border-primary flex items-center space-x-2 w-full border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground px-5 py-3 ${
-                                            data.course_type === element
-                                                ? "border-primary text-primary bg-primary-foreground"
-                                                : ""
-                                        }`}
+                                    <Label htmlFor={element}
+                                           key={element}
+                                           className={`rounded-full focus:border-primary flex items-center space-x-2 w-full border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground px-5 py-3 ${
+                                               data.course_type === element
+                                                   ? "border-primary text-primary bg-primary-foreground"
+                                                   : ""
+                                           }`}
                                     >
                                         <RadioGroupItem
                                             onClick={() => {
@@ -491,7 +491,7 @@ export default function Edit() {
                                             {element.charAt(0).toUpperCase() +
                                                 element.slice(1)}
                                         </Label>
-                                    </div>
+                                    </Label>
                                 ))}
                             </RadioGroup>
 
@@ -509,7 +509,7 @@ export default function Edit() {
                                     onValueChange={(e) => setData("class", e)}
                                 >
                                     <SelectTrigger className="">
-                                        <SelectValue placeholder="Jenis Kelas" />
+                                        <SelectValue placeholder="Jenis Kelas"/>
                                     </SelectTrigger>
                                     <SelectContent>
                                         {classType.map((element) => (
@@ -538,13 +538,13 @@ export default function Edit() {
                                 className="flex w-full gap-5"
                             >
                                 {status.map((element) => (
-                                    <div
-                                        key={element}
-                                        className={`rounded-full focus:border-primary flex items-center space-x-2 w-full border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground px-5 py-3 ${
-                                            data.status === element
-                                                ? "border-primary text-primary bg-primary-foreground"
-                                                : ""
-                                        }`}
+                                    <Label htmlFor={element}
+                                           key={element}
+                                           className={`rounded-full focus:border-primary flex items-center space-x-2 w-full border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground px-5 py-3 ${
+                                               data.status === element
+                                                   ? "border-primary text-primary bg-primary-foreground"
+                                                   : ""
+                                           }`}
                                     >
                                         <RadioGroupItem
                                             onClick={() =>
@@ -557,7 +557,7 @@ export default function Edit() {
                                             {element.charAt(0).toUpperCase() +
                                                 element.slice(1)}
                                         </Label>
-                                    </div>
+                                    </Label>
                                 ))}
                             </RadioGroup>
 

@@ -146,6 +146,14 @@ class UpdateCourseRequest extends FormRequest
         ];
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'start_time' => $this->input('start_time') ? Carbon::parse($this->input('start_time'))->format('H:i') : null,
+            'end_time' => $this->input('end_time') ? Carbon::parse($this->input('end_time'))->format('H:i') : null,
+        ]);
+    }
+
     protected function passedValidation(): void
     {
         $this->handle();
