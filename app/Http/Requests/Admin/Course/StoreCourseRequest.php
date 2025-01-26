@@ -69,6 +69,17 @@ class StoreCourseRequest extends FormRequest
                 'required',
                 Rule::in(CourseType::getValues())
             ],
+            'class' => [
+                'bail',
+                Rule::when($this->input('course_type') !== CourseType::ABK->value, [
+                    'required',
+                    Rule::in(
+                        $this->input('course_type') === CourseType::ACADEMIC->value
+                            ? AcademicClass::getValues()
+                            : ArtsClass::getValues()
+                    )
+                ])
+            ],
             'thumbnail' => [
                 'bail',
                 'required',
@@ -118,40 +129,61 @@ class StoreCourseRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'day.required' => 'Hari harus diisi',
+            'day.array' => 'Hari harus berupa array',
+            'day.in' => 'Hari harus berupa nama hari',
+            'start_time.required' => 'Waktu mulai harus diisi',
+            'start_time.date_format' => 'Waktu mulai harus berupa format H:i',
+            'end_time.required' => 'Waktu selesai harus diisi',
+            'end_time.date_format' => 'Waktu selesai harus berupa format H:i',
+            'end_time.after' => 'Waktu selesai harus setelah waktu mulai',
+            'total_meet.required' => 'Total pertemuan harus diisi',
+            'total_meet.integer' => 'Total pertemuan harus berupa angka',
+            'total_meet.min' => 'Total pertemuan minimal 1',
+            'mentor_id.required' => 'Mentor harus diisi',
+            'mentor_id.exists' => 'Mentor tidak ditemukan',
+            'title.required' => 'Judul harus diisi',
+            'title.string' => 'Judul harus berupa huruf',
+            'title.max' => 'Judul maksimal berukuran 100 karakter',
+            'desc.required' => 'Deskripsi harus diisi',
+            'desc.string' => 'Deskripsi harus berupa huruf',
+            'capacity.required' => 'Kapasitas harus diisi',
+            'capacity.integer' => 'Kapasitas harus berupa angka',
+            'capacity.min' => 'Kapasitas minimal 1',
+            'cost.required' => 'Biaya harus diisi',
+            'disc.required' => 'Diskon harus diisi',
+            'course_type.required' => 'Tipe kursus harus diisi',
+            'course_type.in' => 'Tipe kursus tidak valid',
+            'class.required' => 'Kelas harus diisi',
+            'class.in' => 'Kelas tidak valid',
+            'thumbnail.required' => 'Thumbnail harus diisi',
+            'thumbnail.image' => 'Thumbnail harus berupa gambar',
+            'thumbnail.max' => 'Thumbnail maksimal berukuran 2MB',
+            'status.required' => 'Status harus diisi',
+            'status.in' => 'Status tidak valid',
+            'start_date.required' => 'Tanggal mulai harus diisi',
+            'start_date.date' => 'Tanggal mulai harus berupa tanggal',
+            'end_date.required' => 'Tanggal selesai harus diisi',
+            'end_date.date' => 'Tanggal selesai harus berupa tanggal',
+            'end_date.after' => 'Tanggal selesai harus setelah tanggal mulai',
+        ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'start_time' => $this->input('start_time') ? Carbon::parse($this->input('start_time'))->format('H:i') : null,
+            'end_time' => $this->input('end_time') ? Carbon::parse($this->input('end_time'))->format('H:i') : null,
+        ]);
+    }
+
     protected function passedValidation(): void
     {
         $this->handle();
     }
-
-    protected function after(): array
-    {
-        return [
-
-            function (Validator $validator) {
-                if ($this->input('course_type') !== CourseType::ABK->value) {
-                    if ($this->input('class') === null) {
-                        $validator->errors()->add('class', 'The class field is required for course type');
-                    } else {
-                        if ($this->input('course_type') === CourseType::ACADEMIC->value) {
-                            if (!in_array($this->input('class'), AcademicClass::getValues())) {
-                                $validator->errors()->add('class', 'The class field is invalid for AcademicClass');
-                            } else {
-                                $this->merge(['class' => AcademicClass::from($this->input('class'))->value]);
-                            }
-                        } else {
-                            if (!in_array($this->input('class'), ArtsClass::getValues())) {
-                                $validator->errors()->add('class', 'The class field is invalid for ArtsClass');
-                            } else {
-                                $this->merge(['class' => ArtsClass::from($this->input('class'))->value]);
-                            }
-                        }
-                    }
-                }
-            }
-        ];
-    }
-
-
 
     public function getCourse(): array
     {

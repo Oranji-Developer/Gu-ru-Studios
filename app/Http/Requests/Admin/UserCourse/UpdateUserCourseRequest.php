@@ -38,6 +38,16 @@ class UpdateUserCourseRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'status.required' => 'Status harus diisi',
+            'status.string' => 'Status harus berupa huruf',
+            'status.in' => 'Status tidak valid',
+            'report.url' => 'Report harus berupa URL'
+        ];
+    }
+
     public function getData(): array
     {
         return $this->only(['status']);

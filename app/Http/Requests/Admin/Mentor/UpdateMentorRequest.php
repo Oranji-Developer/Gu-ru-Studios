@@ -89,6 +89,25 @@ class UpdateMentorRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'name.string' => 'Nama harus berupa huruf',
+            'name.max' => 'Nama maksimal berukuran 100 karakter',
+            'address.string' => 'Alamat harus berupa huruf',
+            'address.max' => 'Alamat maksimal berukuran 255 karakter',
+            'gender.in' => 'Jenis kelamin harus berupa Laki-laki atau Perempuan',
+            'desc.string' => 'Deskripsi harus berupa huruf',
+            'profile_picture.image' => 'Foto profil harus berupa gambar',
+            'profile_picture.mimes' => 'Foto profil harus berupa gambar (jpg, jpeg, png)',
+            'profile_picture.max' => 'Foto profil maksimal berukuran 2MB',
+            'cv.mimes' => 'CV harus berupa file gambar atau PDF',
+            'cv.max' => 'CV maksimal berukuran 2MB',
+            'field.in' => 'Bidang harus berupa ' . implode(', ', CourseType::getValues()),
+            'phone.max' => 'Nomor telepon maksimal berukuran 20 karakter',
+        ];
+    }
+
     protected function passedValidation(): void
     {
         $this->handle();
