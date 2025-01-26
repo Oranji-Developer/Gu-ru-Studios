@@ -22,4 +22,16 @@ class ProfileUpdateRequest extends FormRequest
             'address' => ['nullable', 'string', 'max:255'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama harus diisi',
+            'name.string' => 'Nama harus berupa karakter',
+            'name.max' => 'Nama maksimal 100 karakter',
+            'phone.max' => 'Nomor telepon maksimal 20 karakter',
+            'address.string' => 'Alamat harus berupa karakter',
+            'address.max' => 'Alamat maksimal 255 karakter',
+        ];
+    }
 }
