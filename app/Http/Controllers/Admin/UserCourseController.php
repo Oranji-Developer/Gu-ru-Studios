@@ -24,7 +24,17 @@ class UserCourseController extends Controller
      */
     public function index(): Response
     {
-        $data = UserCourse::paginate(5);
+        $data = UserCourse::with([
+            'children' => function ($query) {
+                $query->select(['id', 'user_id', 'name'])->with([
+                    'user:id,name'
+                ]);
+            },
+            'course' => function ($query) {
+                $query->select(['id', 'title', 'thumbnail']);
+            },
+
+        ])->paginate(5);
         return Inertia::render('Admin/UserCourse/Index', [
             'data' => $data
         ]);
