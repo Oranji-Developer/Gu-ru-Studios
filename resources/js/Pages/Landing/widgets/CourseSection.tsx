@@ -88,7 +88,7 @@ export const CourseSection = () => {
                     Lihat Semua
                 </Button>
             </div>
-            <div className="content grid grid-cols-3 items-center justify-items-center gap-8">
+            <div className="content grid grid-cols-2 xl lg:grid-cols-3 2xl:grid-cols-4 items-center justify-items-center gap-8">
                 {courses.map((course, index) => (
                     <CardCourse
                         category={course.course_type}
