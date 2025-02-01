@@ -49,7 +49,7 @@ class CourseController extends Controller
                 ->with([
                     'mentor' => function ($query) {
                         $query->select(['id', 'name'])
-                            ->orderBy('name');
+                            ->orderBy('name')->take(1);
                     }
                 ])
                 ->when($status, function ($query, $status) {
