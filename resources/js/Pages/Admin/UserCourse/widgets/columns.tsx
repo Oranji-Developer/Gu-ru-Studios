@@ -54,7 +54,7 @@ export const columns: ColumnDef<UserCourse>[] = [
                 <div className="flex items-center gap-2">
                     <span
                         className={`p-1 rounded-full text-xs font-semibold text-white ${
-                            data.status === "Aktif"
+                            data.status === "Selesai"
                                 ? "bg-green-500"
                                 : "bg-red-500"
                         }`}
@@ -74,7 +74,9 @@ export const columns: ColumnDef<UserCourse>[] = [
                         className="bg-transparent border border-gray-200 hover:border-primary hover:bg-primary/10 shadow-none rounded-full p-3 w-fit h-fit"
                         onClick={() => {
                             router.get(
-                                route("admin.invoice.edit", { course: data.id })
+                                route("admin.invoice.edit", {
+                                    invoice: data.id,
+                                })
                             );
                         }}
                         variant="secondary"
