@@ -9,7 +9,6 @@ use App\Trait\FileHandleTrait;
 use Exception;
 
 
-
 class EventService extends CrudAbstract
 {
     use FileHandleTrait;
@@ -17,9 +16,7 @@ class EventService extends CrudAbstract
     public function store($request): bool
     {
         try {
-            $data = $request->getData();
-
-            Event::create($data);
+            Event::create($request->getData());
 
             log::info('Event Created');
             return true;
@@ -32,15 +29,7 @@ class EventService extends CrudAbstract
     public function update($request, ?int $id = null): bool
     {
         try {
-            $data = $request->detData();
-
-            $oldData = Event::find($id);
-
-            $this->deleteFile(
-                $oldData->thumbnail
-            );
-
-            $oldData->update($data);
+            Event::findOrFail($id)->update($request->getData());
 
             Log::info('Event Updated');
             return true;
@@ -51,27 +40,5 @@ class EventService extends CrudAbstract
 
         }
     }
-
-    public function destroy($id): bool
-    {
-        try {
-            $event = Event::findorfail($id);
-
-            $this->deleteFile(
-                $event->thumbnail
-            );
-
-            $event->delete();
-
-            Log::info('Event Deleted');
-            return true;
-        } catch (Exception $e) {
-            Log::error("Error at Delete Event: {$e->getMessage()}");
-            return false;
-        }
-    }
-
-
-
 }
 

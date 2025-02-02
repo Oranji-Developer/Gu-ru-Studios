@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Event;
 use App\Enum\Courses\AcademicClass;
 use App\Enum\Courses\ArtsClass;
 use App\Enum\Courses\CourseType;
-use App\Http\Requests\Admin\StoreEventRequest;
-use App\Http\Requests\Admin\UpdateEventRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Event\StoreEventRequest;
+use App\Http\Requests\Admin\Event\UpdateEventRequest;
+use App\Models\Event;
 use App\Services\Admin\EventService;
 use Illuminate\Http\RedirectResponse;
-use Inertia\Inertia;
 use Inertia\Response;
 
 
 class EventController extends Controller
 {
-
     public function __construct(private readonly EventService $service)
     {
     }
@@ -31,10 +28,10 @@ class EventController extends Controller
     {
         $search = request('search');
         $events = Event::select('id', 'title', 'thumbnail', 'desc', 'disc', 'course_type', 'class', 'start_date', 'end_date')
-            ->when($search, fn($query, $search) => $query->where('title', 'like', '%'.$search.'%'))
+            ->when($search, fn($query, $search) => $query->where('title', 'like', '%' . $search . '%'))
             ->paginate(5);
 
-        return Inertia('Admin/Events/Index',[
+        return Inertia('Admin/Event/Index', [
             'events' => $events,
             'search' => $search,
         ]);
@@ -42,10 +39,11 @@ class EventController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * @return Response
      */
-    public function create()
+    public function create(): Response
     {
-        return Inertia('Admin/Events/Create',[
+        return Inertia('Admin/Events/Create', [
             'course_types' => CourseType::getValues(),
             'academic_class' => AcademicClass::getValues(),
             'arts_class' => ArtsClass::getValues(),
@@ -54,32 +52,38 @@ class EventController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @param StoreEventRequest $request
+     * @return RedirectResponse
      */
     public function store(StoreEventRequest $request): RedirectResponse
     {
         $isSuccess = $this->service->store($request);
 
         return $isSuccess
-            ? redirect()->route('admin.events.index')->with('success', 'Event berhasil ditambahkan.')
+            ? redirect()->route('admin.event.index')->with('success', 'Event berhasil ditambahkan.')
             : redirect()->back()->with('error', 'Event gagal ditambahkan.');
     }
 
 
     /**
      * Display the specified resource.
+     * @param string $id
+     * @return Response
      */
-    public function show(string $id)
+    public function show(string $id): Response
     {
         $event = Event::findOrFail($id);
-        return Inertia('Admin/Events/Show', [
+        return Inertia('Admin/Event/Show', [
             'event' => $event
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
+     * @param string $id
+     * @return Response
      */
-    public function edit(string $id)
+    public function edit(string $id): Response
     {
         $event = Event::findOrFail($id);
 
@@ -93,25 +97,16 @@ class EventController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @param UpdateEventRequest $request
+     * @param string $id
+     * @return RedirectResponse
      */
     public function update(UpdateEventRequest $request, string $id): RedirectResponse
     {
         $isSuccess = $this->service->update($request, $id);
 
         return $isSuccess
-            ? redirect()->route('admin.events.index')->with('success', 'Data event berhasil diupdate!!.')
+            ? redirect()->route('admin.event.index')->with('success', 'Data event berhasil diupdate!!.')
             : redirect()->back()->with('error', 'Data event gagal diupdate!!.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id): RedirectResponse
-    {
-        $isSuccess = $this->service->destroy($id);
-
-        return $isSuccess
-            ? redirect()->route('admin.events.index')->with('success', 'Data event berhasil dihapus!!.')
-            : redirect()->back()->with('error', 'Data event gagal dihapus!!.');
     }
 }
