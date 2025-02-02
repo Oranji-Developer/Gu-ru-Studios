@@ -84,6 +84,34 @@ class StoreMentorRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama harus diisi',
+            'name.string' => 'Nama harus berupa huruf',
+            'name.max' => 'Nama maksimal berukuran 100 karakter',
+            'address.required' => 'Alamat harus diisi',
+            'address.string' => 'Alamat harus berupa huruf',
+            'address.max' => 'Alamat maksimal berukuran 255 karakter',
+            'gender.required' => 'Jenis kelamin harus diisi',
+            'gender.in' => 'Jenis kelamin harus berupa Laki-laki atau Perempuan',
+            'desc.required' => 'Deskripsi harus diisi',
+            'desc.string' => 'Deskripsi harus berupa huruf',
+            'profile_picture.required' => 'Foto profil harus diisi',
+            'profile_picture.image' => 'Foto profil harus berupa gambar',
+            'profile_picture.mimes' => 'Foto profil harus berupa gambar (jpg, jpeg, png)',
+            'profile_picture.max' => 'Foto profil maksimal berukuran 2MB',
+            'cv.required' => 'CV harus diisi',
+            'cv.mimes' => 'CV harus berupa file gambar atau PDF',
+            'cv.max' => 'CV maksimal berukuran 2MB',
+            'portfolio.required' => 'Portfolio harus diisi',
+            'field.required' => 'Bidang harus diisi',
+            'field.in' => 'Bidang harus berupa ' . implode(', ', CourseType::getValues()),
+            'phone.required' => 'Nomor telepon harus diisi',
+            'phone.max' => 'Nomor telepon maksimal berukuran 20 karakter',
+        ];
+    }
+
     protected function passedValidation(): void
     {
         $this->handle();

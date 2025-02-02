@@ -41,6 +41,17 @@ class StoreTestimoniesRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'desc.required' => 'Deskripsi harus diisi',
+            'desc.string' => 'Deskripsi harus berupa karakter',
+            'desc.max' => 'Deskripsi maksimal 500 karakter',
+            'rating.required' => 'Rating harus diisi',
+            'rating.in' => 'Rating tidak valid',
+        ];
+    }
+
     public function getData():array
     {
         return $this->validated();

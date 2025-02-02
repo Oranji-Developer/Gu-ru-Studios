@@ -1,5 +1,4 @@
 import React from "react";
-import AuthenticatedLayout from "./AuthenticatedLayout";
 import NavLink from "@/components/NavLink";
 import ResponsiveNavLink from "@/components/ResponsiveNavLink";
 
@@ -13,6 +12,7 @@ import {
     NavigationMenuTrigger,
     NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { AnonLayout } from "./AnonLayout";
 export const CustomerLayout = ({
     header,
     children,
@@ -21,28 +21,44 @@ export const CustomerLayout = ({
     children: React.ReactNode;
 }) => {
     return (
-        <AuthenticatedLayout
-            header={header}
+        <AnonLayout
             navItems={
                 <NavigationMenu>
                     <NavigationMenuList>
                         <NavigationMenuItem>
                             <NavLink
-                                href={route("dashboard")}
-                                active={route().current("dashboard")}
+                                href={route("home")}
+                                classActive="text-primary"
+                                active={route().current("home")}
                             >
-                                Dashboard
+                                Home
                             </NavLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavLink
-                                href={route("profile.edit")}
-                                active={
-                                    route().current("profile.edit") ||
-                                    route().current("account.edit")
-                                }
+                                href={route("dashboard")}
+                                classActive="text-primary"
+                                active={route().current("dashboard")}
                             >
-                                Settings
+                                Tentang Kami
+                            </NavLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavLink
+                                href={route("dashboard")}
+                                classActive="text-primary"
+                                active={route().current("dashboard")}
+                            >
+                                Layanan
+                            </NavLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavLink
+                                href={route("dashboard")}
+                                classActive="text-primary"
+                                active={route().current("dashboard")}
+                            >
+                                Hubungi Kami
                             </NavLink>
                         </NavigationMenuItem>
                     </NavigationMenuList>
@@ -54,7 +70,7 @@ export const CustomerLayout = ({
                         href={route("dashboard")}
                         active={route().current("dashboard")}
                     >
-                        Dashboard
+                        Home
                     </ResponsiveNavLink>
                     <ResponsiveNavLink
                         href={route("profile.edit")}
@@ -63,12 +79,12 @@ export const CustomerLayout = ({
                             route().current("account.edit")
                         }
                     >
-                        Settings
+                        Tentang Kami
                     </ResponsiveNavLink>
                 </div>
             }
         >
             {children}
-        </AuthenticatedLayout>
+        </AnonLayout>
     );
 };
