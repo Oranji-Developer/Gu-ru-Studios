@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\Users\StatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserCourse\UpdateUserCourseRequest;
 use App\Models\UserCourse;
@@ -24,6 +25,11 @@ class UserCourseController extends Controller
      */
     public function index(): Response
     {
+        $time = request('time', '');
+        $filter = request('filter', '');
+        $search = request('search', '');
+
+
         $data = UserCourse::with([
             'children' => function ($query) {
                 $query->select(['id', 'user_id', 'name'])->with([
@@ -34,9 +40,30 @@ class UserCourseController extends Controller
                 $query->select(['id', 'title', 'thumbnail']);
             },
 
-        ])->paginate(5);
+        ])->when(
+                $time,
+                function ($query, $status) {
+                    return $query->orderBy('created_at', $status === 'Terbaru' ? 'desc' : 'asc');
+                }
+            )->when(
+                $filter,
+                function ($query, $filter) {
+                    return $query->where('status', $filter);
+                }
+            )->when(
+                $search,
+                function ($query, $search) {
+                    return $query->whereHas('children', function ($query) use ($search) {
+                        $query->whereHas('user', function ($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search . '%');
+                        });
+                    });
+                }
+            )->paginate(5);
         return Inertia::render('Admin/UserCourse/Index', [
-            'data' => $data
+            'data' => $data,
+            'statusFields' => StatusEnum::getValues(),
+            'timeFields' => ['Terbaru', 'Terlama']
         ]);
     }
 
@@ -48,8 +75,18 @@ class UserCourseController extends Controller
      */
     public function edit($id): Response
     {
+        $userCourseDetail = UserCourse::with([
+            'course' => function ($query) {
+                $query->with('mentor', 'schedule');
+            },
+            'children' => function ($query) {
+                $query->with('user');
+            }
+        ])->find($id);
+
         return Inertia::render('Admin/UserCourse/Edit', [
-            'data' => UserCourse::find($id)
+            'data' => $userCourseDetail,
+            'statusFields' => StatusEnum::getValues()
         ]);
     }
 
