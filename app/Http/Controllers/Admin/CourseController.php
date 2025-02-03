@@ -37,11 +37,7 @@ class CourseController extends Controller
 
         return Inertia::render('Admin/Course/Index', [
             'data' => Course::select(['id', 'thumbnail', 'title', 'status', 'course_type', 'mentor_id'])
-                ->withCount([
-                    'userCourse' => function ($query) {
-                        $query->select('course_id');
-                    }
-                ])
+                ->withCount(['userCourse'])
                 ->with([
                     'mentor' => function ($query) {
                         $query->select(['id', 'name'])

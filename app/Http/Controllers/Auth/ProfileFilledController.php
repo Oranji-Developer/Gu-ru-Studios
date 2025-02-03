@@ -20,7 +20,7 @@ class ProfileFilledController extends Controller
     public function show(Request $request)
     {
         if ($request->user()->isProfilled()) {
-            return redirect(route('dashboard', absolute: false));
+            return redirect(route('dashboard', absolute: false))->with('status', 'profiled-filled');
         }
 
         return Inertia::render('Auth/ProfileFilled');
@@ -35,6 +35,6 @@ class ProfileFilledController extends Controller
             return back()->with('status', 'profiled-failed');
         }
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('dashboard', absolute: false))->with('status', 'profiled-success');
     }
 }

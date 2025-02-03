@@ -19,6 +19,7 @@ class GlobalController extends Controller
         })->take(6)->get();
 
         return Inertia::render('Landing/Welcome', [
+            'status' => session('status'),
             'courses' => $courses,
             'course_type' => $filterCourse,
             'courseTypes' => CourseType::getValues(),
@@ -45,6 +46,8 @@ class GlobalController extends Controller
 
     public function dashboard()
     {
-        return Inertia::render('DashboardRole');
+        return Inertia::render('DashboardRole', [
+            'status' => session('status'),
+        ]);
     }
 }

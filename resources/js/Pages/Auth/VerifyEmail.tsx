@@ -2,6 +2,8 @@ import GuestLayout from "@/Layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { router } from "@inertiajs/react";
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
@@ -12,7 +14,22 @@ export default function VerifyEmail({ status }: { status?: string }) {
         post(route("verification.send"));
     };
 
-    const user = usePage().props.auth.user;
+    const page = usePage();
+    const user = page.props.auth.user;
+
+    const { toast } = useToast();
+
+    router.on("start", (event) => {
+        if (status === "verification-link-sent") showToast();
+    });
+
+    function showToast() {
+        toast({
+            title: "Verification Email Sent",
+            description:
+                "Tautan verifikasi baru telah dikirim ke email yang Anda berikan saat pendaftaran.",
+        });
+    }
 
     return (
         <GuestLayout>
@@ -41,13 +58,6 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     <li>Periksa folder spam/sampah Anda.</li>
                     <li>Masih belum berhasil?.</li>
                 </ul>
-
-                {status === "verification-link-sent" && (
-                    <div className="mb-4 text-sm font-medium text-green-600">
-                        Tautan verifikasi baru telah dikirim ke email yang Anda
-                        berikan saat pendaftaran.
-                    </div>
-                )}
 
                 <form onSubmit={submit} className="my-8">
                     <div className="mt-4 flex flex-col items-center justify-between gap-8">

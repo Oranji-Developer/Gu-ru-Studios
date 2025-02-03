@@ -1,6 +1,6 @@
 import InputError from "@/components/InputError";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,14 +20,14 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
+    const page = usePage();
+
     const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.LOGIN>
     >({
         resolver: zodResolver(UserSchema.LOGIN),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
+        email: "",
+        password: "",
     });
 
     const submit: FormEventHandler = (e) => {
@@ -36,11 +36,7 @@ export default function Login({
         const dataParse = UserSchema.LOGIN.safeParse(data);
 
         if (dataParse.success) {
-            post(route("login"), {
-                onFinish: () => {
-                    reset();
-                },
-            });
+            post(route("login"));
         } else {
             handlingZodInputError(dataParse, errors);
             router.reload();

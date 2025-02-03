@@ -5,6 +5,7 @@ import ResponsiveNavLink from "@/components/ResponsiveNavLink";
 import ApplicationLogo from "@/components/ApplicationLogo";
 import { Footer } from "./widgets/Footer";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { Toaster } from "@/components/ui/toaster";
 
 import {
     NavigationMenu,
@@ -211,6 +212,7 @@ export const AnonLayout = ({
                 {children}
             </main>
             <Footer />
+            <Toaster />
         </div>
     );
 };

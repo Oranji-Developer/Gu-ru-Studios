@@ -18,12 +18,10 @@ export default function Register() {
         z.infer<typeof UserSchema.REGISTER>
     >({
         resolver: zodResolver(UserSchema.REGISTER),
-        defaultValues: {
-            name: "",
-            email: "",
-            password: "",
-            password_confirmation: "",
-        },
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
     });
 
     const submit: FormEventHandler = async (e) => {

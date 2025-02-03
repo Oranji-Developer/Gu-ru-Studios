@@ -2,6 +2,7 @@ import { Link } from "@inertiajs/react";
 import SliderImage from "@/components/SliderImage";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import { PropsWithChildren } from "react";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Guest({ children }: PropsWithChildren) {
     return (
@@ -19,6 +20,7 @@ export default function Guest({ children }: PropsWithChildren) {
             <section className="flex justify-center items-center">
                 <div>{children}</div>
             </section>
+            <Toaster />
         </main>
     );
 }

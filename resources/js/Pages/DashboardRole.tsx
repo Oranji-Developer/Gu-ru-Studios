@@ -5,9 +5,23 @@ import { usePage } from "@inertiajs/react";
 import { CustomerLayout } from "@/Layouts/CustomerLayout";
 import DashboardAdmin from "@/Pages/Admin/Dashboard";
 import DashboardCustomer from "@/Pages/Customer/Dashboard";
+import { useToast } from "@/hooks/use-toast";
 
-export default function DashboardRole() {
-    const user = usePage().props.auth.user;
+export default function DashboardRole({ status }: { status?: string }) {
+    const page = usePage();
+    const user = page.props.auth.user;
+
+    const { toast } = useToast();
+
+    if (status === "authenticated") showToast();
+
+    function showToast() {
+        toast({
+            title: "You are now logged in",
+            description: `Welcome back, ${user.name}! You are now logged in to your account.`,
+        });
+    }
+
     if (user.role === "admin") {
         return (
             <AdminLayout
