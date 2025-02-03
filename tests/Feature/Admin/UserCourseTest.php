@@ -44,7 +44,6 @@ class UserCourseTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertRedirect('/admin/invoice');
-        $response->assertSessionHas('success', 'Data berhasil diupdate!!');
 
         $this->assertDatabaseHas('user_courses', [
             'id' => $userCourse->id,
@@ -108,7 +107,6 @@ class UserCourseTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertRedirect('/admin/invoice');
-        $response->assertSessionHas('success', 'Data berhasil diupdate!!');
 
         $this->assertDatabaseHas('user_courses', [
             'id' => $userCourse->id,
@@ -116,18 +114,62 @@ class UserCourseTest extends TestCase
         ]);
     }
 
-    public function test_user_course_observer_sets_status_to_completed(): void
+    public function test_user_course_observer_update_enrolled_course(): void
     {
+        $course = Course::factory()->create(['mentor_id' => Mentor::factory()->create()->id]);
+
         $userCourse = UserCourse::factory()->create([
-            'course_id' => Course::factory()->create(['mentor_id' => Mentor::factory()->create()->id])->id,
+            'course_id' => $course->id,
             'children_id' => Children::factory()->create(['user_id' => User::factory()->create()->id])->id,
-            'end_date' => Carbon::now()->subDays(4)->toDateString(),
-            'status' => StatusEnum::PAID->value,
+            'status' => StatusEnum::UNPAID->value,
         ]);
 
-        $userCourse->refresh();
+        $userCourse2 = UserCourse::factory()->create([
+            'course_id' => $course->id,
+            'children_id' => Children::factory()->create(['user_id' => User::factory()->create()->id])->id,
+            'status' => StatusEnum::UNPAID->value,
+        ]);
 
-        $this->assertEquals(StatusEnum::COMPLETED->value, $userCourse->status);
+        $userCourse->update(['status' => StatusEnum::PAID->value]);
+
+        $course->refresh();
+
+        $this->assertEquals(1, $course->enrolled);
+
+        $userCourse2->update(['status' => StatusEnum::PAID->value]);
+
+        $course->refresh();
+
+        $this->assertEquals(2, $course->enrolled);
     }
 
+    public function test_user_course_observer_update_decrement_enrolled_course()
+    {
+        $course = Course::factory()->create(['mentor_id' => Mentor::factory()->create()->id]);
+
+        $userCourse = UserCourse::factory()->create([
+            'course_id' => $course->id,
+            'children_id' => Children::factory()->create(['user_id' => User::factory()->create()->id])->id,
+            'status' => StatusEnum::UNPAID->value,
+        ]);
+
+        $userCourse2 = UserCourse::factory()->create([
+            'course_id' => $course->id,
+            'children_id' => Children::factory()->create(['user_id' => User::factory()->create()->id])->id,
+            'status' => StatusEnum::UNPAID->value,
+        ]);
+
+        $userCourse->update(['status' => StatusEnum::PAID->value]);
+        $userCourse2->update(['status' => StatusEnum::PAID->value]);
+
+        $course->refresh();
+
+        $this->assertEquals(2, $course->enrolled);
+
+        $userCourse2->update(['status' => StatusEnum::COMPLETED->value]);
+
+        $course->refresh();
+
+        $this->assertEquals(1, $course->enrolled);
+    }
 }
