@@ -3,6 +3,7 @@
 use App\Enum\Courses\AcademicClass;
 use App\Enum\Courses\ArtsClass;
 use App\Enum\Courses\CourseType;
+use App\Enum\Courses\StatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,8 +24,8 @@ return new class extends Migration {
             $table->enum('class', array_merge(AcademicClass::getValues(), ArtsClass::getValues()))->nullable();
             $table->date('start_date');
             $table->date('end_date');
+            $table->enum('status', StatusEnum::getValues());
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
