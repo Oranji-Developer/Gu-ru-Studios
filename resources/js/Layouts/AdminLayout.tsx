@@ -44,6 +44,22 @@ export const AdminLayout = ({
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavLink
+                                href={route("admin.course.index")}
+                                active={route().current("admin.course.index")}
+                            >
+                                Course
+                            </NavLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavLink
+                                href={route("admin.invoice.index")}
+                                active={route().current("admin.invoice.index")}
+                            >
+                                Transaction
+                            </NavLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavLink
                                 href={route("profile.edit")}
                                 active={
                                     route().current("profile.edit") ||

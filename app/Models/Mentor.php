@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $cv
  * @property string|null $portfolio
  * @property string $field
+ * @property string|null $phone
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -39,6 +40,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Mentor whereGender($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Mentor whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Mentor whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mentor wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Mentor wherePortfolio($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Mentor whereProfilePicture($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Mentor whereUpdatedAt($value)

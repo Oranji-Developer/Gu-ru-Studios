@@ -29,10 +29,9 @@ export default function Edit() {
         phone: mentor.phone ?? "",
         gender: mentor.gender ?? "",
         field: mentor.field ?? "",
+        portfolio: mentor.portfolio ?? "",
         profile_picture: null,
         cv: null,
-        portfolio: null,
-        youtube: "",
     });
 
     const fields = page.fields as string[];
@@ -46,8 +45,18 @@ export default function Edit() {
         console.log(dataParse);
 
         if (dataParse.success) {
-            put(route("admin.mentor.update", { mentor: mentor.id }), {
-                forceFormData: true,
+            router.post(route("admin.mentor.update", { mentor: mentor.id }), {
+                _method: "put",
+                name: dataParse.data.name,
+                address: dataParse.data.address,
+                desc: dataParse.data.desc,
+                phone: dataParse.data.phone,
+                gender: dataParse.data.gender,
+                field: dataParse.data.field,
+                profile_picture: dataParse.data.profile_picture,
+                cv: dataParse.data.cv,
+                portfolio: dataParse.data.portfolio,
+                youtube: dataParse.data.youtube,
             });
         } else {
             handlingZodInputError(dataParse, errors);
@@ -265,56 +274,22 @@ export default function Edit() {
                         </div>
 
                         <div>
-                            <Label htmlFor="portfolio">Upload Portofolio</Label>
+                            <Label htmlFor="portfolio">
+                                Link Youtube Portofolio
+                            </Label>
                             <Input
                                 id="portfolio"
                                 name="portfolio"
-                                type="file"
-                                accept="application/pdf"
-                                placeholder="Masukkan Portofolio Mentor"
+                                value={data.portfolio}
+                                placeholder="Tambahkan Link Youtube Mentor"
                                 autoComplete="portfolio"
                                 onChange={(e) =>
-                                    setData("portfolio", e.target.files?.[0])
+                                    setData("portfolio", e.target.value)
                                 }
                             />
 
                             <InputError
                                 message={errors.portfolio}
-                                className="mt-2"
-                            />
-
-                            {mentor.portfolio && (
-                                <div className="preview mt-2">
-                                    <a
-                                        href={"/storage/" + mentor.portfolio}
-                                        target="_blank"
-                                    >
-                                        <Button
-                                            type="button"
-                                            variant="secondary"
-                                        >
-                                            {mentor.portfolio.split("/").pop()}
-                                        </Button>
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-
-                        <div>
-                            <Label htmlFor="youtube">Link Youtube</Label>
-                            <Input
-                                id="youtube"
-                                name="youtube"
-                                value={data.youtube}
-                                placeholder="Masukkan Link Youtube Mentor"
-                                autoComplete="youtube"
-                                onChange={(e) =>
-                                    setData("youtube", e.target.value)
-                                }
-                            />
-
-                            <InputError
-                                message={errors.youtube}
                                 className="mt-2"
                             />
                         </div>

@@ -25,7 +25,7 @@ export default function Create() {
         phone: "",
         profile_picture: null,
         cv: null,
-        portfolio: null,
+        portfolio: "",
         gender: "Laki-laki",
         field: "akademik",
     });
@@ -234,40 +234,22 @@ export default function Create() {
                         </div>
 
                         <div>
-                            <Label htmlFor="portfolio">Upload Portofolio</Label>
+                            <Label htmlFor="portfolio">
+                                Link Youtube Portofolio
+                            </Label>
                             <Input
                                 id="portfolio"
                                 name="portfolio"
-                                type="file"
-                                accept="application/pdf"
-                                placeholder="Masukkan Portofolio Mentor"
+                                value={data.portfolio}
+                                placeholder="Tambahkan Link Youtube Mentor"
                                 autoComplete="portfolio"
                                 onChange={(e) =>
-                                    setData("portfolio", e.target.files?.[0])
+                                    setData("portfolio", e.target.value)
                                 }
                             />
 
                             <InputError
                                 message={errors.portfolio}
-                                className="mt-2"
-                            />
-                        </div>
-
-                        <div>
-                            <Label htmlFor="youtube">Link Youtube</Label>
-                            <Input
-                                id="youtube"
-                                name="youtube"
-                                value={data.youtube}
-                                placeholder="Masukkan Link Youtube Mentor"
-                                autoComplete="youtube"
-                                onChange={(e) =>
-                                    setData("youtube", e.target.value)
-                                }
-                            />
-
-                            <InputError
-                                message={errors.youtube}
                                 className="mt-2"
                             />
                         </div>

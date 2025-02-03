@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $mentor_id
@@ -25,8 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Mentor $mentor
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Schedule> $schedule
- * @property-read int|null $schedule_count
+ * @property-read \App\Models\Schedule|null $schedule
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserCourse> $userCourse
  * @property-read int|null $user_course_count
  * @method static \Database\Factories\CourseFactory factory($count = null, $state = [])

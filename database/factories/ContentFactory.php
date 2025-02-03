@@ -22,6 +22,7 @@ class ContentFactory extends Factory
             'desc' => $this->faker->paragraph(),
             'thumbnail' => 'default.png',
             'type' => $this->faker->randomElement(ContentType::getValues()),
+            'link' => $this->faker->url,
         ];
     }
 }
