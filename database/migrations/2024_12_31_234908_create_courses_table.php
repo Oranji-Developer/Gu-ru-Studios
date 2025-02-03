@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('title', 100);
             $table->text('desc');
             $table->integer('capacity');
+            $table->integer('enrolled')->default(0);
             $table->decimal('cost', 10, 2);
             $table->decimal('disc', 5, 2)->default(0);
             $table->enum('course_type', CourseType::getValues());
