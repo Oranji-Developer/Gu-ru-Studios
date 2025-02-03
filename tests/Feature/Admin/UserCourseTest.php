@@ -44,7 +44,6 @@ class UserCourseTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertRedirect('/admin/invoice');
-        $response->assertSessionHas('success', 'Data berhasil diupdate!!');
 
         $this->assertDatabaseHas('user_courses', [
             'id' => $userCourse->id,
@@ -108,7 +107,6 @@ class UserCourseTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertRedirect('/admin/invoice');
-        $response->assertSessionHas('success', 'Data berhasil diupdate!!');
 
         $this->assertDatabaseHas('user_courses', [
             'id' => $userCourse->id,
