@@ -13,8 +13,6 @@ export default function DashboardRole({ status }: { status?: string }) {
 
     const { toast } = useToast();
 
-    if (status === "authenticated") showToast();
-
     function showToast() {
         toast({
             title: "You are now logged in",

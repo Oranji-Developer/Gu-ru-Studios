@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { router } from "@inertiajs/react";
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
@@ -11,17 +10,17 @@ export default function VerifyEmail({ status }: { status?: string }) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route("verification.send"));
+        post(route("verification.send"), {
+            onSuccess: () => {
+                if (status === "verification-link-sent") showToast();
+            },
+        });
     };
 
     const page = usePage();
     const user = page.props.auth.user;
 
     const { toast } = useToast();
-
-    router.on("start", (event) => {
-        if (status === "verification-link-sent") showToast();
-    });
 
     function showToast() {
         toast({

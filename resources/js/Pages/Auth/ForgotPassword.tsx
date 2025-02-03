@@ -10,6 +10,7 @@ import { z } from "zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors, reset } = useForm<
@@ -18,6 +19,16 @@ export default function ForgotPassword({ status }: { status?: string }) {
         email: "",
     });
 
+    const { toast } = useToast();
+
+    function showToast() {
+        toast({
+            title: "Password Reset Email Sent",
+            description:
+                "We have e-mailed your password reset link! Please check your inbox.",
+        });
+    }
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
@@ -25,6 +36,10 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
         if (dataParse.success) {
             post(route("password.email"), {
+                onSuccess: (event) => {
+                    const status = event.props.status;
+                    if (status === "password-reset-link-sent") showToast();
+                },
                 onFinish: () => {
                     reset();
                 },
@@ -48,12 +63,6 @@ export default function ForgotPassword({ status }: { status?: string }) {
                         pengaturan ulang.
                     </p>
                 </div>
-
-                {status && (
-                    <div className="mb-4 text-sm font-medium text-green-600">
-                        {status}
-                    </div>
-                )}
 
                 <form onSubmit={submit}>
                     <Label htmlFor="email">Email</Label>
