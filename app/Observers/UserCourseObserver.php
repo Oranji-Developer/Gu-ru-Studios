@@ -3,24 +3,31 @@
 namespace App\Observers;
 
 use App\Enum\Users\StatusEnum;
+use App\Models\Course;
 use App\Models\UserCourse;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class UserCourseObserver
 {
     /**
-     * Handle the UserCourse "retrieved" event.
-     *
-     * @param UserCourse $userCourse
-     * @return void
+     * Handle the UserCourse "updated" event.
      */
-    public function retrieved(UserCourse $userCourse): void
+    public function updated(UserCourse $userCourse): void
     {
-        if ($userCourse->end_date < Carbon::now()->toDateString() && $userCourse->status !== StatusEnum::COMPLETED->value) {
-            Log::info('Retrieved event fired for UserCourse', ['id' => $userCourse->id]);
-            $userCourse->status = StatusEnum::COMPLETED->value;
-            $userCourse->saveQuietly();
+        try {
+            if ($userCourse->isDirty('status')) {
+                $course = Course::findOrFail($userCourse->course_id);
+
+                if ($userCourse->status === StatusEnum::PAID->value) {
+                    $course->increment('enrolled');
+                } else if ($userCourse->status === StatusEnum::COMPLETED->value) {
+                    $course->decrement('enrolled');
+                }
+            }
+
+            Log::info("Update Enrolled Course Success");
+        } catch (\Exception $e) {
+            Log::error("Error when update user xp " . $e->getMessage());
         }
     }
 }

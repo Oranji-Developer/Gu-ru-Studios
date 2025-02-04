@@ -56,12 +56,12 @@ class UserCourseController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the specified resource.
      *
      * @param $id
      * @return Response|RedirectResponse
      */
-    public function edit($id): Response|RedirectResponse
+    public function show($id): Response|RedirectResponse
     {
         $data = UserCourse::with(['children:id,name,user_id', 'course:id,title,desc,course_type,class,thumbnail'])
             ->findOrFail($id);
@@ -70,28 +70,8 @@ class UserCourseController extends Controller
             return redirect()->route('user.course.index')->with('error', 'Anda tidak memiliki akses!!');
         }
 
-        return Inertia::render('User/UserCourse/Edit', [
+        return Inertia::render('User/UserCourse/Show', [
             'data' => $data
         ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateUserCourseRequest $request
-     * @param $id
-     * @return RedirectResponse
-     */
-    public function update(UpdateUserCourseRequest $request, $id): RedirectResponse
-    {
-        if (Gate::denies('can-update', UserCourse::findOrFail($id)->children)) {
-            return redirect()->route('user.course.index')->with('error', 'Anda tidak memiliki akses!!');
-        }
-
-        $isSuccess = $this->service->update($request, $id);
-
-        return $isSuccess
-            ? redirect()->route('user.course.index')->with('success', 'Data berhasil diupdate!!')
-            : redirect()->route('user.course.index')->with('error', 'Data gagal diupdate!!');
     }
 }

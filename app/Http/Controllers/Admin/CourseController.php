@@ -33,23 +33,35 @@ class CourseController extends Controller
     public function index(): Response
     {
         $status = request('status', '');
+        $filter = request('filter', '');
+        $search = request('search', '');
+
         $statusFields = StatusEnum::getValues();
+        $courseType = CourseType::getValues();
 
         return Inertia::render('Admin/Course/Index', [
             'data' => Course::select(['id', 'thumbnail', 'title', 'status', 'course_type', 'mentor_id'])
                 ->withCount('userCourse')
                 ->with([
                     'mentor' => function ($query) {
-                        $query->select(['id', 'name'])->take(1);
+                        $query->select(['id', 'name'])
+                            ->orderBy('name')->take(1);
                     }
                 ])
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 })
+                ->when($filter, function ($query, $filter) {
+                    return $query->where('course_type', $filter);
+                })
+                ->when($search, function ($query, $search) {
+                    return $query->where('title', 'like', '%' . $search . '%');
+                })
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
             'status' => $status,
-            'statusFields' => $statusFields
+            'statusFields' => $statusFields,
+            'course_type' => $courseType,
         ]);
     }
 
