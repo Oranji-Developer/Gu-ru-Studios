@@ -41,11 +41,7 @@ class CourseController extends Controller
 
         return Inertia::render('Admin/Course/Index', [
             'data' => Course::select(['id', 'thumbnail', 'title', 'status', 'course_type', 'mentor_id'])
-                ->withCount([
-                    'userCourse' => function ($query) {
-                        $query->select('course_id');
-                    }
-                ])
+                ->withCount('userCourse')
                 ->with([
                     'mentor' => function ($query) {
                         $query->select(['id', 'name'])
@@ -139,7 +135,7 @@ class CourseController extends Controller
             'userCourse' => function ($query) {
                 return $query->select(['id', 'course_id', 'children_id'])
                     ->with([
-                        'testimonies:id,user_course_id,content',
+                        'testimonies:id,userCourse_id,desc',
                         'children.user:id,name'
                     ]);
             }
