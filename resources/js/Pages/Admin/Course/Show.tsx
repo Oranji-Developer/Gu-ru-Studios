@@ -47,7 +47,7 @@ export default function Show() {
                 </div>
             }
         >
-            <Head title="Manage Detail Transaction" />
+            <Head title="Detail Course" />
             <div className="mb-10 py-4 border-t flex gap-12">
                 <div className="grow">
                     <div className="flex items-stretch gap-3 mb-6">
