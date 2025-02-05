@@ -12,6 +12,7 @@ use App\Http\Requests\Admin\Course\UpdateCourseRequest;
 use App\Models\Course;
 use App\Models\Mentor;
 use App\Models\Schedule;
+use App\Models\Testimonies;
 use App\Services\Admin\CourseService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -45,7 +46,7 @@ class CourseController extends Controller
                 ->with([
                     'mentor' => function ($query) {
                         $query->select(['id', 'name'])
-                            ->orderBy('name')->take(1);
+                            ->orderBy('name');
                     }
                 ])
                 ->when($status, function ($query, $status) {
@@ -105,19 +106,20 @@ class CourseController extends Controller
     public function show(string $id): Response
     {
         return Inertia::render('Admin/Course/Show', [
-            'data' => Course::with([
+            'course' => Course::with([
                 'mentor:id,name,field',
+                'schedule:id,course_id,start_date,end_date,day,start_time,end_time,total_meet',
                 'userCourse' => function ($query) {
-                    $query->select(['id', 'course_id', 'children_id'])
+                    $query->select(['id', 'course_id', 'children_id', 'start_date'])
                         ->with([
-                            'testimonies:id,user_course_id,content',
+                            'testimonies:id,userCourse_id,desc,rating',
                             'children.user:id,name'
                         ]);
                 }
             ])->findOrFail($id),
-            'status' => StatusEnum::getValues(),
-            'academic_class' => AcademicClass::getValues(),
-            'art_class' => ArtsClass::getValues(),
+            'testimonies' => Testimonies::whereHas('userCourse', function ($query) use ($id) {
+                $query->where('course_id', $id);
+            })->with('userCourse.children.user:id,name')->get()
         ]);
     }
 

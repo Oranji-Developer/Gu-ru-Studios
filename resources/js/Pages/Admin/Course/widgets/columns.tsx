@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { router } from "@inertiajs/react";
 import { Course } from "@/types/Course";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import {
+    TrashIcon,
+    PencilSquareIcon,
+    ArrowTopRightOnSquareIcon,
+} from "@heroicons/react/24/outline";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -74,6 +78,17 @@ export const columns: ColumnDef<Course>[] = [
             const data = row.original;
             return (
                 <div className="flex gap-2 justify-end px-4">
+                    <Button
+                        className="bg-transparent border border-gray-200 hover:border-primary hover:bg-primary/10 shadow-none rounded-full p-3 w-fit h-fit"
+                        onClick={() => {
+                            router.get(
+                                route("admin.course.show", { course: data.id })
+                            );
+                        }}
+                        variant="secondary"
+                    >
+                        <ArrowTopRightOnSquareIcon className="text-black" />
+                    </Button>
                     <Button
                         className="bg-transparent border border-gray-200 hover:border-primary hover:bg-primary/10 shadow-none rounded-full p-3 w-fit h-fit"
                         onClick={() => {
