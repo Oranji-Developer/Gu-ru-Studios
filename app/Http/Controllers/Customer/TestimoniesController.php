@@ -33,26 +33,6 @@ class TestimoniesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateTestimoniesRequest $request
-     * @param string $id
-     * @return RedirectResponse
-     */
-    public function update(UpdateTestimoniesRequest $request, string $id): RedirectResponse
-    {
-        if (Gate::denies('can-update', Testimonies::findOrFail($id)->userCourse->children)) {
-            return redirect()->back()->with('error', 'Kamu tidak memiliki akses untuk mengupdate data ini.');
-        }
-
-        $isSuccess = $this->service->update($request, $id);
-
-        return $isSuccess
-            ? redirect()->back()->with('success', 'Testimony berhasil diupdate!!')
-            : redirect()->back()->with('error', 'Testimony gagal diupdate!!');
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param string $id
