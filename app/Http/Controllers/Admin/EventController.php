@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enum\Courses\AcademicClass;
 use App\Enum\Courses\ArtsClass;
 use App\Enum\Courses\CourseType;
+use App\Enum\Courses\StatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Event\StoreEventRequest;
 use App\Http\Requests\Admin\Event\UpdateEventRequest;
@@ -26,13 +27,22 @@ class EventController extends Controller
      */
     public function index(): Response
     {
-        $search = request('search');
-        $events = Event::select('id', 'title', 'thumbnail', 'desc', 'disc', 'course_type', 'class', 'start_date', 'end_date')
-            ->when($search, fn($query, $search) => $query->where('title', 'like', '%' . $search . '%'))
+        $search = request('search', '');
+        $status = request('status', '');
+
+        $events = Event::select('id', 'title', 'desc', 'disc', 'status', 'start_date', 'end_date')
+            ->when($status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->when($search, function ($query, $search) {
+                $query->where('title', 'like', '%' . $search . '%');
+            })
             ->paginate(5);
 
         return Inertia('Admin/Event/Index', [
             'events' => $events,
+            'status' => StatusEnum::getValues(),
+            'activeStatus' => $status,
             'search' => $search,
         ]);
     }
@@ -43,7 +53,8 @@ class EventController extends Controller
      */
     public function create(): Response
     {
-        return Inertia('Admin/Events/Create', [
+        return Inertia('Admin/Event/Create', [
+            'status' => StatusEnum::getValues(),
             'course_types' => CourseType::getValues(),
             'academic_class' => AcademicClass::getValues(),
             'arts_class' => ArtsClass::getValues(),
@@ -87,11 +98,12 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        return Inertia('Admin/Events/Edit', [
-            'event' => Event::findOrFail($id),
+        return Inertia('Admin/Event/Edit', [
+            'event' => $event,
             'course_types' => CourseType::getValues(),
             'academic_class' => AcademicClass::getValues(),
             'arts_class' => ArtsClass::getValues(),
+            'status' => StatusEnum::getValues(),
         ]);
     }
 
