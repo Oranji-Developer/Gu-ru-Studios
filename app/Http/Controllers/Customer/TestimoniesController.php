@@ -51,23 +51,4 @@ class TestimoniesController extends Controller
             ? redirect()->back()->with('success', 'Testimony berhasil diupdate!!')
             : redirect()->back()->with('error', 'Testimony gagal diupdate!!');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param string $id
-     * @return RedirectResponse
-     */
-    public function destroy(string $id): RedirectResponse
-    {
-        if (Gate::denies('can-delete', Testimonies::findOrFail($id)->userCourse->children)) {
-            return redirect()->route('user.course.index')->with('error', 'Kamu tidak memiliki akses untuk menghapus data ini.');
-        }
-
-        $isSuccess = $this->service->destroy($id);
-
-        return $isSuccess
-            ? redirect()->back()->with('success', 'Testimony berhasil dihapus!!')
-            : redirect()->back()->with('error', 'Testimony gagal dihapus!!');
-    }
 }
