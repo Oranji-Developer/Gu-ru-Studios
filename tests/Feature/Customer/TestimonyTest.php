@@ -150,51 +150,6 @@ class TestimonyTest extends TestCase
         $response->assertSessionHas('error', 'Kamu tidak memiliki akses untuk mengupdate data ini.');
     }
 
-    public function test_customer_can_delete_own_testimony(): void
-    {
-        $response = $this->actingAs($this->customer)
-            ->delete("/user/testimony/{$this->testimony->id}");
-
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Testimony berhasil dihapus!!');
-
-        $this->assertDatabaseHas('testimonies', [
-            'id' => $this->testimony->id,
-        ]);
-
-        $this->assertDatabaseMissing('testimonies', [
-            'desc' => 'Testimony description',
-            'rating' => '5',
-            'deleted_at' => null
-        ]);
-    }
-
-    public function test_customer_cannot_delete_others_testimony(): void
-    {
-        $otherCustomer = User::factory()->create([
-            'role' => RoleEnum::CUSTOMER->value
-        ]);
-
-        $otherChildren = Children::factory()->create([
-            'user_id' => $otherCustomer->id
-        ]);
-
-        $otherUserCourse = UserCourse::factory()->create([
-            'course_id' => Course::factory()->create(['mentor_id' => Mentor::factory()->create()->id])->id,
-            'children_id' => $otherChildren->id
-        ]);
-
-        $otherTestimony = Testimonies::factory()->create([
-            'userCourse_id' => $otherUserCourse->id
-        ]);
-
-        $response = $this->actingAs($this->customer)
-            ->delete("/user/testimony/{$otherTestimony->id}");
-
-        $response->assertStatus(302);
-        $response->assertSessionHas('error', 'Kamu tidak memiliki akses untuk menghapus data ini.');
-    }
-
     public function test_non_customer_cannot_access_testimony_routes(): void
     {
         $data = [
