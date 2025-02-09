@@ -39,7 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserCourse whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-#[ObservedBy([UserCourseObserver::class])]
+#[ObservedBy(UserCourseObserver::class)]
 class UserCourse extends Model
 {
     use HasFactory;

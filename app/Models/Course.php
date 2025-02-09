@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $mentor_id
@@ -63,6 +63,7 @@ class Course extends Model
         'thumbnail',
         'status',
         'mentor_id',
+        'enrolled'
     ];
 
     public function mentor(): BelongsTo

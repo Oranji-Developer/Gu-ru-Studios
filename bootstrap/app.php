@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Middleware\EnsureProfileIsFilled;
+use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\RoleAccessMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,15 +17,21 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
-            \App\Http\Middleware\HandleInertiaRequests::class,
-            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            HandleInertiaRequests::class,
+            AddLinkHeadersForPreloadedAssets::class,
         ]);
         $middleware->alias([
-            'profiled' => \App\Http\Middleware\EnsureProfileIsFilled::class,
-            'role' => \App\Http\Middleware\RoleAccessMiddleware::class,
+            'profiled' => EnsureProfileIsFilled::class,
+            'role' => RoleAccessMiddleware::class,
         ]);
 
         //
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command('courses:update-expired')
+            ->dailyAt('00:00');
+        $schedule->command('events:update-inactive')
+            ->dailyAt('00:00');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
