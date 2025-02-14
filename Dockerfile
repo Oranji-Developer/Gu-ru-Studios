@@ -28,7 +28,7 @@ RUN composer install && \
     composer require laravel/octane && \
     php artisan octane:install --server=frankenphp
 
-RUN bun install --production && bun build --outdir=dist ./src/index.tsx
+RUN bun install --production
 
 EXPOSE 8000
 
