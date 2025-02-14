@@ -12,16 +12,16 @@ use Illuminate\Support\Facades\Log;
 
 class UserCourseService extends CrudAbstract
 {
-    public function store($request): bool
+    public function store($request): mixed
     {
         try {
-            UserCourse::create($request->getData());
+            $userCourse = UserCourse::create($request->getData());
 
             Log::info("store user course success");
-            return true;
+            return $userCourse->id;
         } catch (Exception $e) {
             Log::error("error when store user course: " . $e->getMessage());
-            return false;
+            return null;
         }
     }
 

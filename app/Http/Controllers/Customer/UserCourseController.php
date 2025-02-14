@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Enum\Users\StatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\UserCourse\StoreUserCourseRequest;
 use App\Http\Requests\Customer\UserCourse\UpdateUserCourseRequest;
@@ -27,16 +28,28 @@ class UserCourseController extends Controller
      */
     public function index(): Response
     {
+        $filter = request('filter', '');
+
         $user = Auth::user();
-        $data = UserCourse::with('course:id,title,desc,course_type,class,thumbnail')
+        $data = UserCourse::with([
+            'course' => function ($query) {
+                $query->select(['id', 'title', 'thumbnail', 'status', 'mentor_id', 'course_type'])->with([
+                    'mentor:id,name',
+                ]);
+            },
+        ])
             ->whereHas('children', function ($query) use ($user) {
                 $query->whereIn('children_id', $user->children->pluck('id'));
             })
+            ->when($filter, function ($query, $filter) {
+                return $query->where('status', $filter);
+            })
             ->orderBy('created_at', 'desc')
-            ->paginate(5, ['id', 'course_id', 'children_id', 'status']);
+            ->paginate(5);
 
         return Inertia::render('User/UserCourse/Index', [
-            'data' => $data
+            'data' => $data,
+            'statusFields' => StatusEnum::getValues(),
         ]);
     }
 
@@ -51,8 +64,8 @@ class UserCourseController extends Controller
         $isSuccess = $this->service->store($request);
 
         return $isSuccess
-            ? redirect()->route('user.course.index')->with('success', 'Data berhasil disimpan!!')
-            : redirect()->route('user.course.index')->with('error', 'Data gagal disimpan!!');
+            ? redirect()->route('user.payment.whatshapp', [$isSuccess])->with('success', 'Data berhasil disimpan!!')
+            : redirect()->back()->with('error', 'Data gagal disimpan!!');
     }
 
     /**

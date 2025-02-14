@@ -31,8 +31,11 @@ class ChildrenController extends Controller
     {
         $data = Children::where('user_id', auth()->id())->get();
 
+
         return Inertia::render('Customer/Children/Index', [
-            'data' => $data
+            'data' => $data,
+            'gender' => GenderEnum::getValues(),
+            'classes' => AcademicClass::getValues()
         ]);
     }
 
@@ -60,7 +63,7 @@ class ChildrenController extends Controller
         $isSuccess = $this->childrenService->store($request);
 
         return $isSuccess
-            ? redirect()->route('user.children.index')->with('success', 'Berhasil menambahkan data anak!!')
+            ? redirect()->back()->with('success', 'Berhasil menambahkan data anak!!')
             : back()->with('error', 'Gagal menambahkan data anak!!');
     }
 
@@ -75,7 +78,7 @@ class ChildrenController extends Controller
         $data = Children::findOrFail($id);
 
         if (Gate::denies('can-view', $data)) {
-            return redirect()->route('user.children.index')->with('error', 'Anda tidak memiliki akses untuk melihat data anak ini!!');
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk melihat data anak ini!!');
         }
 
         return Inertia::render('Customer/Children/Show', [
