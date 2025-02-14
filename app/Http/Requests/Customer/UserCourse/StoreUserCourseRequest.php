@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Customer\UserCourse;
 
 use App\Enum\Users\StatusEnum;
+use App\Models\Course;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,6 +15,14 @@ class StoreUserCourseRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $course = Course::findOrFail($this->course_id);
+        if ($course->capacity == $course->enrolled) {
+            $this->validator->errors()->add('course_id', 'Kuota penuh');
+        }
     }
 
     /**

@@ -12,9 +12,9 @@ abstract class CrudAbstract implements CrudInterface
      * @param $request
      * @return bool
      * */
-    public function store($request): bool
+    public function store($request): mixed
     {
-        return false;
+        return null;
     }
 
     /*
@@ -24,9 +24,9 @@ abstract class CrudAbstract implements CrudInterface
      * @param $id
      * @return bool
      * */
-    public function update($request, ?int $id = null): bool
+    public function update($request, ?int $id = null): mixed
     {
-        return false;
+        return null;
     }
 
 
@@ -36,8 +36,8 @@ abstract class CrudAbstract implements CrudInterface
      * @param $id
      * @return bool
      * */
-    public function destroy($id): bool
+    public function destroy($id): mixed
     {
-        return false;
+        return null;
     }
 }

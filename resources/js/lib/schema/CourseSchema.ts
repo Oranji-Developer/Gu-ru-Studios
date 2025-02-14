@@ -49,7 +49,7 @@ export class CourseSchema {
                 })
                 .optional()
                 .nullable(),
-            class: z.string().min(5).optional(),
+            class: z.string().min(4).optional(),
             status: z.string().min(3).max(100),
             start_time: z.string(),
             end_time: z.string(),

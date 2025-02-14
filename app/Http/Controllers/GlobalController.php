@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\Courses\AcademicClass;
 use App\Enum\Courses\CourseType;
+use App\Enum\Users\GenderEnum;
+use App\Models\Children;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use Illuminate\Foundation\Application;
@@ -41,6 +44,27 @@ class GlobalController extends Controller
             'course_type' => $filterCourse,
             'courseTypes' => CourseType::getValues(),
             'courses' => $courses,
+        ]);
+    }
+
+    public function courseDetail($id)
+    {
+        $course = Course::with([
+            'mentor',
+            'schedule',
+            'userCourse' => function ($query) {
+                $query->with('testimonies', 'children.user');
+            }
+        ])->findOrFail($id);
+
+        $children = Children::where('user_id', auth()->id())->get();
+
+
+        return Inertia::render('Courses/Detail', [
+            'course' => $course,
+            'classes' => AcademicClass::getValues(),
+            'gender' => GenderEnum::getValues(),
+            'children' => $children
         ]);
     }
 

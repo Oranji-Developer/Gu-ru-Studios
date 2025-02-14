@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\EventObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $class
  * @property string $start_date
  * @property string $end_date
+ * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -42,9 +44,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event withoutTrashed()
  * @mixin \Eloquent
  */
+#[ObservedBy([EventObserver::class])]
 class Event extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $table = 'events';
     protected $fillable = [
@@ -56,5 +59,6 @@ class Event extends Model
         'class',
         'start_date',
         'end_date',
+        'status',
     ];
 }

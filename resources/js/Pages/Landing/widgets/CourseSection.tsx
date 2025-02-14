@@ -42,7 +42,7 @@ export const CourseSection = () => {
     }
 
     return (
-        <section className="">
+        <section className="" id="services">
             <div className="header flex justify-between items-center mb-12">
                 <h1 className="text-[3.5rem] font-semibold leading-[120%]">
                     Jelajahi beberapa kelas <br />
@@ -91,6 +91,7 @@ export const CourseSection = () => {
             <div className="content grid grid-cols-2 xl lg:grid-cols-3 2xl:grid-cols-4 items-center justify-items-center gap-8">
                 {courses.map((course, index) => (
                     <CardCourse
+                        id_course={course.id}
                         category={course.course_type}
                         key={index}
                         title={course.title}

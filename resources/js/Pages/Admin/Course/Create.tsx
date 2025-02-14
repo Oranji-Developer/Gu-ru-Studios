@@ -128,7 +128,7 @@ export default function Create() {
             <Head title="Create Course"/>
             <form onSubmit={submit} className="pb-10">
                 <section className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2">
-                    <div className="">
+                    <div className="flex flex-col gap-2">
                         <div>
                             <Label htmlFor="title">Nama Kelas</Label>
                             <Input
@@ -342,7 +342,7 @@ export default function Create() {
                             />
                         </div>
                     </div>
-                    <div>
+                    <div className="flex flex-col gap-2">
                         <div className="">
                             <Label htmlFor="capacity">Kapasitas</Label>
                             <Input

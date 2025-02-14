@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import { AnonLayout } from "./AnonLayout";
 export const CustomerLayout = ({
-    header,
     children,
 }: {
     header?: React.ReactNode;
@@ -36,27 +35,27 @@ export const CustomerLayout = ({
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavLink
-                                href={route("dashboard")}
+                                href={route("home")}
                                 classActive="text-primary"
-                                active={route().current("dashboard")}
+                                active={false}
                             >
                                 Tentang Kami
                             </NavLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavLink
-                                href={route("dashboard")}
+                                href={route("courses")}
                                 classActive="text-primary"
-                                active={route().current("dashboard")}
+                                active={route().current("courses")}
                             >
                                 Layanan
                             </NavLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavLink
-                                href={route("dashboard")}
+                                href={route("home")}
                                 classActive="text-primary"
-                                active={route().current("dashboard")}
+                                active={false}
                             >
                                 Hubungi Kami
                             </NavLink>

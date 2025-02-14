@@ -12,6 +12,7 @@ use App\Http\Requests\Admin\Course\UpdateCourseRequest;
 use App\Models\Course;
 use App\Models\Mentor;
 use App\Models\Schedule;
+use App\Models\Testimonies;
 use App\Services\Admin\CourseService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,11 +34,15 @@ class CourseController extends Controller
     public function index(): Response
     {
         $status = request('status', '');
+        $filter = request('filter', '');
+        $search = request('search', '');
+
         $statusFields = StatusEnum::getValues();
+        $courseType = CourseType::getValues();
 
         return Inertia::render('Admin/Course/Index', [
             'data' => Course::select(['id', 'thumbnail', 'title', 'status', 'course_type', 'mentor_id'])
-                ->withCount(['userCourse'])
+                ->withCount('userCourse')
                 ->with([
                     'mentor' => function ($query) {
                         $query->select(['id', 'name'])
@@ -47,10 +52,17 @@ class CourseController extends Controller
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 })
+                ->when($filter, function ($query, $filter) {
+                    return $query->where('course_type', $filter);
+                })
+                ->when($search, function ($query, $search) {
+                    return $query->where('title', 'like', '%' . $search . '%');
+                })
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
             'status' => $status,
-            'statusFields' => $statusFields
+            'statusFields' => $statusFields,
+            'course_type' => $courseType,
         ]);
     }
 
@@ -94,19 +106,20 @@ class CourseController extends Controller
     public function show(string $id): Response
     {
         return Inertia::render('Admin/Course/Show', [
-            'data' => Course::with([
+            'course' => Course::with([
                 'mentor:id,name,field',
+                'schedule:id,course_id,start_date,end_date,day,start_time,end_time,total_meet',
                 'userCourse' => function ($query) {
-                    $query->select(['id', 'course_id', 'children_id'])
+                    $query->select(['id', 'course_id', 'children_id', 'start_date'])
                         ->with([
-                            'testimonies:id,user_course_id,content',
+                            'testimonies:id,userCourse_id,desc,rating',
                             'children.user:id,name'
                         ]);
                 }
             ])->findOrFail($id),
-            'status' => StatusEnum::getValues(),
-            'academic_class' => AcademicClass::getValues(),
-            'art_class' => ArtsClass::getValues(),
+            'testimonies' => Testimonies::whereHas('userCourse', function ($query) use ($id) {
+                $query->where('course_id', $id);
+            })->with('userCourse.children.user:id,name')->get()
         ]);
     }
 
@@ -124,7 +137,7 @@ class CourseController extends Controller
             'userCourse' => function ($query) {
                 return $query->select(['id', 'course_id', 'children_id'])
                     ->with([
-                        'testimonies:id,user_course_id,content',
+                        'testimonies:id,userCourse_id,desc',
                         'children.user:id,name'
                     ]);
             }
