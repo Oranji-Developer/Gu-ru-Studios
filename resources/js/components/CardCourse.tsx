@@ -1,8 +1,11 @@
 import { cn } from "@/lib/utils";
 import React, { ComponentPropsWithoutRef } from "react";
 import { StarIcon } from "@heroicons/react/24/solid";
+import { Button } from "@/components/ui/button";
+import { router } from "@inertiajs/react";
 
 interface CardCourseProps extends ComponentPropsWithoutRef<"div"> {
+    id_course: number;
     title: string;
     thumbnail: string;
     rate: number;
@@ -13,6 +16,7 @@ interface CardCourseProps extends ComponentPropsWithoutRef<"div"> {
 }
 
 export const CardCourse: React.FC<CardCourseProps> = ({
+    id_course,
     title,
     thumbnail,
     rate,
@@ -22,6 +26,10 @@ export const CardCourse: React.FC<CardCourseProps> = ({
     category,
     className,
 }) => {
+    function goToCourseDetail() {
+        router.visit(route("course.detail", { course_id: id_course }));
+    }
+
     return (
         <div
             className={cn(
@@ -93,9 +101,7 @@ export const CardCourse: React.FC<CardCourseProps> = ({
                     </h6>
                 </div>
                 <div className="action">
-                    <button className="bg-primary text-white px-4 py-2 rounded-lg">
-                        Berlangganan
-                    </button>
+                    <Button onClick={goToCourseDetail}>Berlangganan</Button>
                 </div>
             </div>
         </div>
