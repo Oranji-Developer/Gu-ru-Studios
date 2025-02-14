@@ -37,7 +37,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
         if (dataParse.success) {
             post(route("password.email"), {
                 onSuccess: (event) => {
-                    const status = event.props.status;
+                    const status = event.props.session.flash.success;
                     if (status === "password-reset-link-sent") showToast();
                 },
                 onFinish: () => {

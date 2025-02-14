@@ -12,6 +12,7 @@ import { z } from "zod";
 import GoogleIcon from "@/assets/svgr/google";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { toast } from "@/hooks/use-toast";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<

@@ -10,19 +10,22 @@ import { UserSchema } from "@/lib/schema/UserSchema";
 import InputError from "@/components/InputError";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { toast } from "@/hooks/use-toast";
 
 export default function Profilled({ status }: { status?: string }) {
-    const page = usePage();
+    const page = usePage().props;
 
     const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.UPDATE>
     >({
         resolver: zodResolver(UserSchema.UPDATE),
-        email: page.props.auth.user.email,
-        name: page.props.auth.user.name,
+        email: page.auth.user.email,
+        name: page.auth.user.name,
         phone: "",
         address: "",
     });
+
+    console.log(page);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -39,6 +42,21 @@ export default function Profilled({ status }: { status?: string }) {
             router.reload();
         }
     };
+
+    router.on("navigate", (event) => {
+        console.log(event);
+        const session = event.detail.page.props.session;
+        if (session.flash.success === "verified") {
+            showToastEmail();
+        }
+    });
+
+    function showToastEmail() {
+        toast({
+            title: "Email has been Verified",
+            description: "Complete your profile to finish registration.",
+        });
+    }
 
     return (
         <GuestLayout>

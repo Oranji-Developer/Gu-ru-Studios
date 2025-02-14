@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -35,7 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect(route('dashboard'))->with('status', 'authenticated');
+        return redirect(route('dashboard'))->with('success', 'authenticated');
     }
 
     /**

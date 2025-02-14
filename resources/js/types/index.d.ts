@@ -14,4 +14,10 @@ export type PageProps<
     auth: {
         user: User;
     };
+    session: {
+        flash: {
+            success: string;
+            error: string;
+        };
+    };
 };

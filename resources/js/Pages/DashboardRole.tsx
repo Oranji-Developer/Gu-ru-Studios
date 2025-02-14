@@ -1,24 +1,32 @@
 import { AdminLayout } from "@/Layouts/AdminLayout";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import { usePage } from "@inertiajs/react";
+import { usePage, router } from "@inertiajs/react";
 import { CustomerLayout } from "@/Layouts/CustomerLayout";
 import DashboardAdmin from "@/Pages/Admin/Dashboard";
 import DashboardCustomer from "@/Pages/Customer/Dashboard";
 import { useToast } from "@/hooks/use-toast";
 
 export default function DashboardRole({ status }: { status?: string }) {
-    const page = usePage();
-    const user = page.props.auth.user;
+    const page = usePage().props;
+    const user = page.auth.user;
 
     const { toast } = useToast();
-
-    function showToast() {
-        toast({
-            title: "You are now logged in",
-            description: `Welcome back, ${user.name}! You are now logged in to your account.`,
-        });
-    }
+    router.on("navigate", (event) => {
+        const session = event.detail.page.props.session;
+        console.log(session);
+        if (session.flash.success === "authenticated") {
+            toast({
+                title: "You are now logged in",
+                description: `Welcome back, ${user.name}! You are now logged in to your account.`,
+            });
+        } else if (session.flash.success === "registered") {
+            toast({
+                title: "You already register",
+                description: `Welcome to Guru, ${user.name}! Book your first course.`,
+            });
+        }
+    });
 
     if (user.role === "admin") {
         return (

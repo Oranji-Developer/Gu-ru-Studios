@@ -1,6 +1,6 @@
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, useForm, usePage, router } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -11,7 +11,8 @@ export default function VerifyEmail({ status }: { status?: string }) {
         e.preventDefault();
 
         post(route("verification.send"), {
-            onSuccess: () => {
+            onSuccess: (event) => {
+                const status = event.props.session.flash.success;
                 if (status === "verification-link-sent") showToast();
             },
         });
@@ -19,6 +20,13 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
     const page = usePage();
     const user = page.props.auth.user;
+
+    router.on("navigate", (event) => {
+        console.log(event);
+        if (event.detail.page.props.session.flash.success === "registered") {
+            showToast();
+        }
+    });
 
     const { toast } = useToast();
 

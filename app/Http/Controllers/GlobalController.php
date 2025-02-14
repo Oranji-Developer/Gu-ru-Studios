@@ -46,8 +46,6 @@ class GlobalController extends Controller
 
     public function dashboard()
     {
-        return Inertia::render('DashboardRole', [
-            'status' => session('status'),
-        ]);
+        return Inertia::render('DashboardRole');
     }
 }
