@@ -29,18 +29,6 @@ class AppServiceProvider extends ServiceProvider
             return in_array($user->role, $roles) ? Response::allow() : Response::deny();
         });
 
-        Gate::define('can-update', function ($user, $model) {
-            return $user->id === $model->user_id;
-        });
-
-        Gate::define('can-view', function ($user, $model) {
-            return $user->id === $model->user_id;
-        });
-
-        Gate::define('can-delete', function ($user, $model) {
-            return $user->id === $model->user_id;
-        });
-
         if (env('APP_ENV') == 'production') {
             URL::forceScheme('https');
         }

@@ -9,14 +9,15 @@ use App\Http\Requests\Customer\Children\StoreChildrenRequest;
 use App\Http\Requests\Customer\Children\UpdateChildrenRequest;
 use App\Models\Children;
 use App\Services\Customer\ChildrenService;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ChildrenController extends Controller
 {
+    use AuthorizesRequests;
 
     public function __construct(private readonly ChildrenService $childrenService)
     {
@@ -30,7 +31,6 @@ class ChildrenController extends Controller
     public function index(): Response
     {
         $data = Children::where('user_id', auth()->id())->get();
-
 
         return Inertia::render('Customer/Children/Index', [
             'data' => $data,
@@ -72,14 +72,13 @@ class ChildrenController extends Controller
      *
      * @param string $id
      * @return Response|RedirectResponse
+     * @throws AuthorizationException
      */
     public function show(string $id): Response|RedirectResponse
     {
         $data = Children::findOrFail($id);
 
-        if (Gate::denies('can-view', $data)) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk melihat data anak ini!!');
-        }
+        $this->authorize('view', $data);
 
         return Inertia::render('Customer/Children/Show', [
             'data' => $data
@@ -90,15 +89,14 @@ class ChildrenController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param string $id
-     * @return Response|RedirectResponse
+     * @return Response
+     * @throws AuthorizationException
      */
-    public function edit(string $id)
+    public function edit(string $id): Response
     {
         $data = Children::findOrFail($id);
 
-        if (Gate::denies('can-view', $data)) {
-            return redirect()->route('user.children.index')->with('error', 'Anda tidak memiliki akses untuk melihat data anak ini!!');
-        }
+        $this->authorize('view', $data);
 
         return Inertia::render('Customer/Children/Show', [
             'data' => $data,
@@ -113,9 +111,12 @@ class ChildrenController extends Controller
      * @param UpdateChildrenRequest $request
      * @param string $id
      * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function update(UpdateChildrenRequest $request, string $id): RedirectResponse
     {
+        $this->authorize('update', Children::findOrFail($id));
+
         $isSuccess = $this->childrenService->update($request, $id);
 
         return $isSuccess

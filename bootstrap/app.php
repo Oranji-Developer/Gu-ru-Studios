@@ -3,11 +3,13 @@
 use App\Http\Middleware\EnsureProfileIsFilled;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\RoleAccessMiddleware;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -34,5 +36,8 @@ return Application::configure(basePath: dirname(__DIR__))
             ->dailyAt('00:00');
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+        $exceptions->renderable(function (AuthorizationException $e) {
+            return back()->with('error', 'Anda tidak memiliki akses untuk melakukan aksi ini!!');
+        });
+    })
+    ->create();

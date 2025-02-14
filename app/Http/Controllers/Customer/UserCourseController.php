@@ -8,6 +8,8 @@ use App\Http\Requests\Customer\UserCourse\StoreUserCourseRequest;
 use App\Http\Requests\Customer\UserCourse\UpdateUserCourseRequest;
 use App\Models\UserCourse;
 use App\Services\Shared\UserCourseService;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,8 @@ use Inertia\Response;
 
 class UserCourseController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(private readonly UserCourseService $service)
     {
     }
@@ -73,15 +77,14 @@ class UserCourseController extends Controller
      *
      * @param $id
      * @return Response|RedirectResponse
+     * @throws AuthorizationException
      */
     public function show($id): Response|RedirectResponse
     {
         $data = UserCourse::with(['children:id,name,user_id', 'course:id,title,desc,course_type,class,thumbnail'])
             ->findOrFail($id);
 
-        if (Gate::denies('can-view', $data->children)) {
-            return redirect()->route('user.course.index')->with('error', 'Anda tidak memiliki akses!!');
-        }
+        $this->authorize('view', $data);
 
         return Inertia::render('User/UserCourse/Show', [
             'data' => $data

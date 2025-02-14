@@ -7,12 +7,16 @@ use App\Http\Requests\Customer\Testimonies\StoreTestimoniesRequest;
 use App\Http\Requests\Customer\Testimonies\UpdateTestimoniesRequest;
 use App\Models\Testimonies;
 use App\Services\Customer\TestimoniesService;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class TestimoniesController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(private readonly TestimoniesService $service)
     {
     }
@@ -38,12 +42,11 @@ class TestimoniesController extends Controller
      * @param UpdateTestimoniesRequest $request
      * @param string $id
      * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function update(UpdateTestimoniesRequest $request, string $id): RedirectResponse
     {
-        if (Gate::denies('can-update', Testimonies::findOrFail($id)->userCourse->children)) {
-            return redirect()->back()->with('error', 'Kamu tidak memiliki akses untuk mengupdate data ini.');
-        }
+        $this->authorize('update', Testimonies::find($id));
 
         $isSuccess = $this->service->update($request, $id);
 
