@@ -29,14 +29,14 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
      *
      * @var Closure|null
      */
-    public static ?Closure $createUrlCallback;
+    public static $createUrlCallback;
 
     /**
      * The callback that should be used to build the mail message.
      *
      * @var Closure|null
      */
-    public static ?Closure $toMailCallback;
+    public static $toMailCallback;
 
     /**
      * Create a new notification instance.
@@ -83,6 +83,7 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage|null
     {
+
         try {
             if (static::$toMailCallback) {
                 return call_user_func(static::$toMailCallback, $notifiable, $this->token);
@@ -90,19 +91,29 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
 
             $resetPasswordUrl = $this->resetUrl($notifiable);
 
-
             Log::info('Sending verification email to: ' . $notifiable->email);
 
-            return (new MailMessage)
-                ->subject('Welcome to ' . config('app.name') . ' - Reset Password Link')
-                ->view('emails.resetPassword', [
-                    'user' => $notifiable->name,
-                    'resetPasswordUrl' => $resetPasswordUrl,
-                ]);
+            return $this->buildMailMessage($resetPasswordUrl, $notifiable);
         } catch (\Exception $e) {
             Log::error('Error sending verification email: ' . $e->getMessage());
             return null;
         }
+    }
+
+    /**
+     * Get the reset password notification mail message for the given URL.
+     *
+     * @param  string  $url
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    protected function buildMailMessage($url, object $notifiable)
+    {
+        return (new MailMessage)
+            ->subject('Welcome to ' . config('app.name') . ' - Reset Password Link')
+            ->view('emails.resetPassword', [
+                'user' => $notifiable->name,
+                'resetPasswordUrl' => $url,
+            ]);
     }
 
 
