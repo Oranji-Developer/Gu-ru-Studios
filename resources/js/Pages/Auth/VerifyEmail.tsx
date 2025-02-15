@@ -33,8 +33,8 @@ export default function VerifyEmail({ status }: { status?: string }) {
         <GuestLayout>
             <Head title="Email Verification" />
 
-            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
-                <h1 className="text-[3.25rem] font-medium">
+            <section className="py-4 md:px-8 w-full md:w-[calc(40vw-6rem)]">
+                <h1 className="text-4xl leading-normal md:text-[3.25rem] font-medium">
                     Terima kasih telah mendaftar! 🎉
                 </h1>
                 <p className="font-medium mt-8">

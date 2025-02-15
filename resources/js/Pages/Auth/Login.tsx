@@ -52,7 +52,7 @@ export default function Login({
     return (
         <GuestLayout>
             <Head title="Log in" />
-            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
+            <section className="py-4 md:px-8 w-full md:w-[calc(40vw-6rem)]">
                 <div className="mb-8">
                     <h1 className="text-[3.25rem] font-medium">Login</h1>
                     <p className="text-gray-500">
