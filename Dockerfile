@@ -1,35 +1,52 @@
-FROM php:8.3-cli
+# Build stage for Node/Bun assets
+FROM oven/bun:latest AS node-builder
+WORKDIR /app
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
+COPY . .
+RUN bun run build
+
+# PHP stage
+FROM dunglas/frankenphp
 
 WORKDIR /app
 
-COPY --chown=www-data:www-data . /app
+# Install PHP extensions
+RUN install-php-extensions \
+    pcntl \
+    pdo_mysql \
+    opcache \
+    zip \
+    gd \
+    intl \
+    bcmath
 
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
-    && docker-php-ext-install zip pcntl opcache bcmath \
-    && docker-php-ext-enable zip opcache bcmath
-
+# Configure PHP
 COPY docker/php.ini /usr/local/etc/php/conf.d/custom.ini
 
+# Install composer
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
 
-#COPY --from=oven/bun:latest /bun/bin/bun /usr/local/bin/bun
+# Copy all application files first
+COPY --chown=www-data:www-data . .
 
-RUN curl -fsSL https://bun.sh/install | bash && \
-    mv /root/.bun/bin/bun /usr/local/bin/bun
+# Copy built assets from node-builder stage
+COPY --from=node-builder --chown=www-data:www-data /app/public/build public/build
 
-RUN git config --global --add safe.directory /app
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-ENV COMPOSER_ALLOW_SUPERUSER=1
+# Laravel specific commands
+# Optimize Laravel
+RUN php artisan optimize
+RUN php artisan storage:link
 
-RUN composer install && \
-    composer require laravel/octane && \
-    php artisan octane:install --server=frankenphp
+# Set permissions
+RUN chown -R www-data:www-data /app
+RUN chmod -R 755 /app/storage /app/bootstrap/cache
 
-RUN bun install --production
-
+# Expose port
 EXPOSE 8000
 
+# Start Laravel Octane
 CMD ["php", "artisan", "octane:start", "--host=0.0.0.0", "--port=8000"]

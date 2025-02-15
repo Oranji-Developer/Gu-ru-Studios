@@ -10,3 +10,7 @@ use Inertia\Inertia;
 Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
 });
+
+Route::get('/info', function () {
+    dd(phpinfo(), php_ini_loaded_file());
+});
