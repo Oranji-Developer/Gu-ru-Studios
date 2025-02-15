@@ -20,6 +20,10 @@ class ProfileFilledController extends Controller
 
     public function show(Request $request)
     {
+        if ($request->user()->hasVerifiedEmail()) {
+            Session::flash('success', 'verified');
+        }
+
         if ($request->user()->isProfilled()) {
             Session::flash('success', 'authenticated');
             return redirect(route('dashboard', absolute: false));
