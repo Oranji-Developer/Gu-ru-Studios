@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class TransactionController extends Controller
 {
-
-    public function invoice($course_id, $children_id): \Inertia\Response
+    public function invoice($course_id, $children_id): Response
     {
         $children = Children::with('user')->findOrFail($children_id);
         $course = Course::with('mentor', 'schedule')->findOrFail($course_id);
@@ -30,7 +30,8 @@ class TransactionController extends Controller
             'children' => $children,
         ]);
     }
-    public function paymentWhatshapp($id)
+
+    public function paymentWhatshapp($id): Response
     {
         $userCourse = UserCourse::with([
             'course',
