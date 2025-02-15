@@ -1,13 +1,13 @@
 import { CustomerLayout } from "@/Layouts/CustomerLayout";
-import { Course } from "@/types/Course";
+import { Course } from "@/types/model/Course";
 import { Button } from "@/components/ui/button";
 import { usePage, router, Head, Link } from "@inertiajs/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
 import { format } from "date-fns";
-import { Schedule } from "@/types/Schedule";
-import { UserCourse } from "@/types/UserCourse";
-import { Testimonies } from "@/types/Testimonies";
+import { Schedule } from "@/types/model/Schedule";
+import { UserCourse } from "@/types/model/UserCourse";
+import { Testimonies } from "@/types/model/Testimonies";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "@inertiajs/react";

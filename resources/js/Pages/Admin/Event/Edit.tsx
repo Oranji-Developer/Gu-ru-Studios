@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { addDays, format } from "date-fns";
-import { Event } from "@/types/Event";
+import { Event } from "@/types/model/Event";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
 import { FormEventHandler } from "react";
 

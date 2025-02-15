@@ -1,13 +1,13 @@
 import { Head, router, usePage } from "@inertiajs/react";
 import { AdminLayout } from "@/Layouts/AdminLayout";
-import { Mentor } from "@/types/Mentor";
+import { Mentor } from "@/types/model/Mentor";
 import { columns } from "./widgets/columns";
 import { DataTable } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import { Pagination } from "@/types/Pagination";
+import { Pagination } from "@/types/util/Pagination";
 
 export default function Index() {
     const page = usePage();

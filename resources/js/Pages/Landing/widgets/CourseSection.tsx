@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { CardCourse } from "@/components/CardCourse";
 import React from "react";
 import { usePage, router } from "@inertiajs/react";
-import { Course } from "@/types/Course";
+import { Course } from "@/types/model/Course";
 import { useState } from "react";
 
 export const CourseSection = () => {

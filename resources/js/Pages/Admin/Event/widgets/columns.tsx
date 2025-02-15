@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Event } from "@/types/Event";
+import { Event } from "@/types/model/Event";
 import { Button } from "@/components/ui/button";
 import { router } from "@inertiajs/react";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
