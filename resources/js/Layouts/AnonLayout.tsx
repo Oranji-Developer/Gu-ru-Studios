@@ -8,17 +8,6 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Toaster } from "@/components/ui/toaster";
 
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuIndicator,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
-
-import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -26,6 +15,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 
 import { Button } from "@/components/ui/button";
 import { nullable } from "zod";
@@ -44,7 +35,7 @@ export const AnonLayout = ({
         useState(false);
     return (
         <div className="relative min-h-screen">
-            <nav className="">
+            <nav className="relative">
                 <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-16 ">
                     <div className="flex h-[8rem] justify-between">
                         <div className="flex items-center">
@@ -55,47 +46,22 @@ export const AnonLayout = ({
                         </div>
 
                         <div className="-me-2 flex items-center sm:hidden">
-                            <button
+                            <Button
                                 onClick={() =>
                                     setShowingNavigationDropdown(
                                         (previousState) => !previousState
                                     )
                                 }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
                             >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? "inline-flex"
-                                                : "hidden"
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? "inline-flex"
-                                                : "hidden"
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
+                                {showingNavigationDropdown ? (
+                                    <XMarkIcon />
+                                ) : (
+                                    <Bars3Icon />
+                                )}
+                            </Button>
                         </div>
                         {!user && (
-                            <div className="flex items-center gap-2">
+                            <div className="hidden md:flex items-center gap-2">
                                 <Button
                                     type="button"
                                     variant="secondary"
@@ -111,7 +77,7 @@ export const AnonLayout = ({
                             </div>
                         )}
                         {user && (
-                            <div className="flex items-center">
+                            <div className="hidden md:flex items-center">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>
                                         <Button asChild={true}>
@@ -177,34 +143,71 @@ export const AnonLayout = ({
                 </div>
 
                 <div
-                    className={
-                        (showingNavigationDropdown ? "block" : "hidden") +
-                        " sm:hidden"
-                    }
+                    className={`
+                        ${showingNavigationDropdown ? "absolute" : "hidden"}
+                         sm:hidden inset-0 top-24 z-40  rounded-b-lg overflow-hidden ${
+                             user ? "h-[25rem]" : "h-72"
+                         }`}
                 >
-                    {navResponsiveItems}
-                    {user && (
-                        <div className="border-t border-gray-200 pb-1 pt-4">
-                            <div className="px-4">
-                                <div className="text-base font-medium text-gray-800">
-                                    {user.name}
+                    <div className="h-full bg-primary">
+                        {navResponsiveItems}
+                        {user && (
+                            <div className="border-t border-gray-200 pb-1 pt-4">
+                                <div className="px-4">
+                                    <div className="text-base font-medium text-white">
+                                        {user.name}
+                                    </div>
+                                    <div className="text-sm font-medium text-white/80">
+                                        {user.email}
+                                    </div>
                                 </div>
-                                <div className="text-sm font-medium text-gray-500">
-                                    {user.email}
+
+                                <div className="mt-3 space-y-1">
+                                    <ResponsiveNavLink
+                                        href={route("dashboard")}
+                                        as="button"
+                                    >
+                                        Kalas Saya
+                                    </ResponsiveNavLink>
+                                    <ResponsiveNavLink
+                                        active={
+                                            route().current("profile.edit") ||
+                                            route().current("account.edit")
+                                        }
+                                        href={route("profile.edit")}
+                                        as="button"
+                                    >
+                                        Settings
+                                    </ResponsiveNavLink>
+                                    <ResponsiveNavLink
+                                        method="post"
+                                        href={route("logout")}
+                                        as="button"
+                                    >
+                                        Log Out
+                                    </ResponsiveNavLink>
                                 </div>
                             </div>
-
-                            <div className="mt-3 space-y-1">
+                        )}
+                        {!user && (
+                            <div className="mt-3 space-y-1 bg-purple-950 border-t border-purple-800 pb-2">
                                 <ResponsiveNavLink
-                                    method="post"
-                                    href={route("logout")}
+                                    className="text-white"
+                                    href={route("login")}
                                     as="button"
                                 >
-                                    Log Out
+                                    Login
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    className="text-white"
+                                    href={route("register")}
+                                    as="button"
+                                >
+                                    Daftar Sekarang
                                 </ResponsiveNavLink>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </nav>
 

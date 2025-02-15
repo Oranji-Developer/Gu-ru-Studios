@@ -64,21 +64,34 @@ export const CustomerLayout = ({
                 </NavigationMenu>
             }
             navResponsiveItems={
-                <div className="space-y-1 pb-3 pt-2">
+                <div className="pb-3 pt-2">
                     <ResponsiveNavLink
+                        className="justify-center"
                         href={route("dashboard")}
                         active={route().current("dashboard")}
                     >
                         Home
                     </ResponsiveNavLink>
                     <ResponsiveNavLink
-                        href={route("profile.edit")}
-                        active={
-                            route().current("profile.edit") ||
-                            route().current("account.edit")
-                        }
+                        className="justify-center"
+                        href={route("home")}
+                        active={route().current("home")}
                     >
                         Tentang Kami
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        className="justify-center"
+                        href={route("courses")}
+                        active={route().current("courses")}
+                    >
+                        Layanan
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        className="justify-center"
+                        href={route("home")}
+                        active={false}
+                    >
+                        Hubungi Kami
                     </ResponsiveNavLink>
                 </div>
             }
