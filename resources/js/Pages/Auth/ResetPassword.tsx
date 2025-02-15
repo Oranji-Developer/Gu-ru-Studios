@@ -10,6 +10,7 @@ import { UserSchema } from "@/lib/schema/UserSchema";
 import { router } from "@inertiajs/react";
 import { z } from "zod";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { passwordResetToast } from "@/lib/toast/auth/ResetPasswordToast";
 
 export default function ResetPassword({
     token,
@@ -34,6 +35,12 @@ export default function ResetPassword({
 
         if (dataParse.success) {
             post(route("password.store"), {
+                onSuccess: (event) => {
+                    const status = event.props.session.flash.success;
+                    if (status === "password-reset") {
+                        passwordResetToast();
+                    }
+                },
                 onFinish: () => {
                     reset();
                 },

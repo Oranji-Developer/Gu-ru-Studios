@@ -6,19 +6,17 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import { z } from "zod";
 import GoogleIcon from "@/assets/svgr/google";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
-import { toast } from "@/hooks/use-toast";
+import { emailSentToast } from "@/lib/toast/auth/EmailToast";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.REGISTER>
     >({
-        resolver: zodResolver(UserSchema.REGISTER),
         name: "",
         email: "",
         password: "",
@@ -28,7 +26,7 @@ export default function Register() {
     const submit: FormEventHandler = async (e) => {
         e.preventDefault();
 
-        let dataParse = await UserSchema.REGISTER.safeParseAsync(data);
+        let dataParse = await UserSchema.REGISTER.safeParse(data);
 
         if (dataParse.success) {
             post(route("register"), {
@@ -39,6 +37,14 @@ export default function Register() {
             router.reload();
         }
     };
+
+    router.on("success", (event) => {
+        const page = event.detail.page;
+        const session = page.props.session;
+        if (session.flash.success === "registered") {
+            emailSentToast();
+        }
+    });
 
     return (
         <GuestLayout>

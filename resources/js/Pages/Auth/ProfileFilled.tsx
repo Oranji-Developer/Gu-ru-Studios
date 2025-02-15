@@ -5,27 +5,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormEventHandler } from "react";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import InputError from "@/components/InputError";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
-import { toast } from "@/hooks/use-toast";
+import { registeredToast } from "@/lib/toast/auth/AuthToast";
+import { emailVerifiedToast } from "@/lib/toast/auth/EmailToast";
 
 export default function Profilled({ status }: { status?: string }) {
     const page = usePage().props;
+    const user = page.auth.user;
 
     const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.UPDATE>
     >({
-        resolver: zodResolver(UserSchema.UPDATE),
-        email: page.auth.user.email,
-        name: page.auth.user.name,
+        email: user.email,
+        name: user.name,
         phone: "",
         address: "",
     });
-
-    console.log(page);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -44,19 +42,15 @@ export default function Profilled({ status }: { status?: string }) {
     };
 
     router.on("navigate", (event) => {
-        console.log(event);
-        const session = event.detail.page.props.session;
+        const page = event.detail.page.props;
+        const session = page.session;
+        const user = page.auth.user;
         if (session.flash.success === "verified") {
-            showToastEmail();
+            emailVerifiedToast();
+        } else if (session.flash.success === "registered") {
+            registeredToast(user, page.appName);
         }
     });
-
-    function showToastEmail() {
-        toast({
-            title: "Email has been Verified",
-            description: "Complete your profile to finish registration.",
-        });
-    }
 
     return (
         <GuestLayout>

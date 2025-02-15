@@ -11,6 +11,7 @@ import { UserSchema } from "@/lib/schema/UserSchema";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
 import { useToast } from "@/hooks/use-toast";
+import { passwordResetRequestToast } from "@/lib/toast/auth/ResetPasswordToast";
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors, reset } = useForm<
@@ -18,16 +19,6 @@ export default function ForgotPassword({ status }: { status?: string }) {
     >({
         email: "",
     });
-
-    const { toast } = useToast();
-
-    function showToast() {
-        toast({
-            title: "Password Reset Email Sent",
-            description:
-                "We have e-mailed your password reset link! Please check your inbox.",
-        });
-    }
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -38,7 +29,8 @@ export default function ForgotPassword({ status }: { status?: string }) {
             post(route("password.email"), {
                 onSuccess: (event) => {
                     const status = event.props.session.flash.success;
-                    if (status === "password-reset-link-sent") showToast();
+                    if (status === "password-reset-link-sent")
+                        passwordResetRequestToast();
                 },
                 onFinish: () => {
                     reset();

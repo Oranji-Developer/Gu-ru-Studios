@@ -2,10 +2,13 @@ import GuestLayout from "@/Layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
 import { Head, Link, useForm, usePage, router } from "@inertiajs/react";
 import { FormEventHandler } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { emailSentToast } from "@/lib/toast/auth/EmailToast";
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
+
+    const page = usePage();
+    const user = page.props.auth.user;
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -13,30 +16,18 @@ export default function VerifyEmail({ status }: { status?: string }) {
         post(route("verification.send"), {
             onSuccess: (event) => {
                 const status = event.props.session.flash.success;
-                if (status === "verification-link-sent") showToast();
+                if (status === "verification-link-sent") emailSentToast();
             },
         });
     };
 
-    const page = usePage();
-    const user = page.props.auth.user;
-
     router.on("navigate", (event) => {
-        console.log(event);
-        if (event.detail.page.props.session.flash.success === "registered") {
-            showToast();
+        const page = event.detail.page;
+        const session = page.props.session;
+        if (session.flash.success === "registered") {
+            emailSentToast();
         }
     });
-
-    const { toast } = useToast();
-
-    function showToast() {
-        toast({
-            title: "Verification Email Sent",
-            description:
-                "Tautan verifikasi baru telah dikirim ke email yang Anda berikan saat pendaftaran.",
-        });
-    }
 
     return (
         <GuestLayout>

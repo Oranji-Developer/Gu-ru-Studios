@@ -1,17 +1,17 @@
 import InputError from "@/components/InputError";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import GoogleIcon from "@/assets/svgr/google";
 import InputPassword from "@/components/InputPassword";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { loggedInToast } from "@/lib/toast/auth/AuthToast";
 
 export default function Login({
     status,
@@ -20,12 +20,9 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
-    const page = usePage();
-
     const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.LOGIN>
     >({
-        resolver: zodResolver(UserSchema.LOGIN),
         email: "",
         password: "",
     });
@@ -42,6 +39,15 @@ export default function Login({
             router.reload();
         }
     };
+
+    router.on("success", (event) => {
+        const page = event.detail.page;
+        const session = page.props.session;
+        const user = page.props.auth.user;
+        if (session.flash.success === "authenticated") {
+            loggedInToast(user);
+        }
+    });
 
     return (
         <GuestLayout>
