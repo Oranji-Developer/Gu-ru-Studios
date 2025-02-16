@@ -79,6 +79,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var list<string>
      */
     protected $hidden = [
+        'gauth_id',
+        'gauth_type',
         'password',
         'remember_token',
     ];

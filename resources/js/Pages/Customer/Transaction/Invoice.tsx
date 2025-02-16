@@ -1,6 +1,6 @@
 import { CustomerLayout } from "@/Layouts/CustomerLayout";
-import { Children } from "@/types/Children";
-import { Course } from "@/types/Course";
+import { Children } from "@/types/model/Children";
+import { Course } from "@/types/model/Course";
 import { usePage } from "@inertiajs/react";
 import React from "react";
 import { FormEventHandler } from "react";

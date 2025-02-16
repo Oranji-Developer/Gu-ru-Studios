@@ -1,5 +1,5 @@
 import { AdminLayout } from "@/Layouts/AdminLayout";
-import { Course } from "@/types/Course";
+import { Course } from "@/types/model/Course";
 import { usePage, Head } from "@inertiajs/react";
 import {
     UserGroupIcon,
@@ -8,8 +8,8 @@ import {
     StarIcon,
 } from "@heroicons/react/24/solid";
 import React from "react";
-import { UserCourse } from "@/types/UserCourse";
-import { Testimonies } from "@/types/Testimonies";
+import { UserCourse } from "@/types/model/UserCourse";
+import { Testimonies } from "@/types/model/Testimonies";
 
 export default function Show() {
     const page = usePage();

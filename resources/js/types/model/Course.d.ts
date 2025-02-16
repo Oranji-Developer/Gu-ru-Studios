@@ -1,5 +1,5 @@
-import { Mentor } from "@/types/Mentor";
-import { Schedule } from "@/types/Schedule";
+import { Mentor } from "@/types/model/Mentor";
+import { Schedule } from "@/types/model/Schedule";
 
 export type Course = {
     id: number;

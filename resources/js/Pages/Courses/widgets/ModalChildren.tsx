@@ -28,8 +28,8 @@ import {
 import { FormEventHandler } from "react";
 
 import { z, ZodError } from "zod";
-import { Children } from "@/types/Children";
-import { Course } from "@/types/Course";
+import { Children } from "@/types/model/Children";
+import { Course } from "@/types/model/Course";
 
 interface ModalChildren {}
 

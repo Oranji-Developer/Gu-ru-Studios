@@ -1,7 +1,7 @@
 import { AdminLayout } from "@/Layouts/AdminLayout";
 import { Head, usePage, router } from "@inertiajs/react";
 import { columns } from "./widgets/columns";
-import { Course } from "@/types/Course";
+import { Course } from "@/types/model/Course";
 import { DataTable } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { Pagination } from "@/types/Pagination";
+import { Pagination } from "@/types/util/Pagination";
 
 export default function Index() {
     const page = usePage().props;

@@ -6,30 +6,27 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import { z } from "zod";
 import GoogleIcon from "@/assets/svgr/google";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { emailSentToast } from "@/lib/toast/auth/EmailToast";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.REGISTER>
     >({
-        resolver: zodResolver(UserSchema.REGISTER),
-        defaultValues: {
-            name: "",
-            email: "",
-            password: "",
-            password_confirmation: "",
-        },
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
     });
 
     const submit: FormEventHandler = async (e) => {
         e.preventDefault();
 
-        let dataParse = await UserSchema.REGISTER.safeParseAsync(data);
+        let dataParse = await UserSchema.REGISTER.safeParse(data);
 
         if (dataParse.success) {
             post(route("register"), {
@@ -41,11 +38,19 @@ export default function Register() {
         }
     };
 
+    router.on("success", (event) => {
+        const page = event.detail.page;
+        const session = page.props.session;
+        if (session.flash.success === "registered") {
+            emailSentToast();
+        }
+    });
+
     return (
         <GuestLayout>
             <Head title="Register" />
 
-            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
+            <section className="py-4 md:px-8 w-full md:w-[calc(40vw-6rem)]">
                 <div className="mb-8">
                     <h1 className="text-[3.25rem] font-medium">Buat akun</h1>
                     <p className="text-gray-500">

@@ -5,21 +5,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormEventHandler } from "react";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import InputError from "@/components/InputError";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { registeredToast } from "@/lib/toast/auth/AuthToast";
+import { emailVerifiedToast } from "@/lib/toast/auth/EmailToast";
 
 export default function Profilled({ status }: { status?: string }) {
-    const page = usePage();
+    const page = usePage().props;
+    const user = page.auth.user;
 
     const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.UPDATE>
     >({
-        resolver: zodResolver(UserSchema.UPDATE),
-        email: page.props.auth.user.email,
-        name: page.props.auth.user.name,
+        email: user.email,
+        name: user.name,
         phone: "",
         address: "",
     });
@@ -40,15 +41,26 @@ export default function Profilled({ status }: { status?: string }) {
         }
     };
 
+    router.on("navigate", (event) => {
+        const page = event.detail.page.props;
+        const session = page.session;
+        const user = page.auth.user;
+        if (session.flash.success === "verified") {
+            emailVerifiedToast();
+        } else if (session.flash.success === "registered") {
+            registeredToast(user, page.appName);
+        }
+    });
+
     return (
         <GuestLayout>
             <Head title="Profil Filled" />
-            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
+            <section className="py-4 md:px-8 w-full md:w-[calc(40vw-6rem)] flex flex-col justify-center h-screen md:block md:h-auto">
                 <div className="mb-8">
-                    <h1 className="text-[3.25rem] font-medium">
+                    <h1 className="text-4xl leading-normal md:text-[3.25rem] font-medium">
                         Masukan Data diri kamu 📝
                     </h1>
-                    <p>
+                    <p className="text-base">
                         Data diri kamu pasti aman kok, soalnya data kamu akan
                         kami enkripsi
                     </p>

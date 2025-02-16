@@ -1,25 +1,40 @@
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, useForm, usePage, router } from "@inertiajs/react";
 import { FormEventHandler } from "react";
+import { emailSentToast } from "@/lib/toast/auth/EmailToast";
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
 
+    const page = usePage();
+    const user = page.props.auth.user;
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route("verification.send"));
+        post(route("verification.send"), {
+            onSuccess: (event) => {
+                const status = event.props.session.flash.success;
+                if (status === "verification-link-sent") emailSentToast();
+            },
+        });
     };
 
-    const user = usePage().props.auth.user;
+    router.on("navigate", (event) => {
+        const page = event.detail.page;
+        const session = page.props.session;
+        if (session.flash.success === "registered") {
+            emailSentToast();
+        }
+    });
 
     return (
         <GuestLayout>
             <Head title="Email Verification" />
 
-            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
-                <h1 className="text-[3.25rem] font-medium">
+            <section className="py-4 md:px-8 w-full md:w-[calc(40vw-6rem)]">
+                <h1 className="text-4xl leading-normal md:text-[3.25rem] font-medium">
                     Terima kasih telah mendaftar! 🎉
                 </h1>
                 <p className="font-medium mt-8">
@@ -41,13 +56,6 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     <li>Periksa folder spam/sampah Anda.</li>
                     <li>Masih belum berhasil?.</li>
                 </ul>
-
-                {status === "verification-link-sent" && (
-                    <div className="mb-4 text-sm font-medium text-green-600">
-                        Tautan verifikasi baru telah dikirim ke email yang Anda
-                        berikan saat pendaftaran.
-                    </div>
-                )}
 
                 <form onSubmit={submit} className="my-8">
                     <div className="mt-4 flex flex-col items-center justify-between gap-8">
