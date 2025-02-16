@@ -4,7 +4,7 @@ import { whyGuruContent } from "@/lib/data/whyGuru";
 
 export const Supperior = () => {
     return (
-        <section className="">
+        <section className="" id="aboutUs">
             <div className="header mb-8">
                 <h1 className="text-[3.5rem] font-semibold text-center">
                     Kenapa <span className="text-primary">Gu Ru Studios</span>?

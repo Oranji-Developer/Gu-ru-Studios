@@ -1,6 +1,6 @@
 import { CustomerLayout } from "@/Layouts/CustomerLayout";
-import { Pagination } from "@/types/Pagination";
-import { UserCourse } from "@/types/UserCourse";
+import { Pagination } from "@/types/util/Pagination";
+import { UserCourse } from "@/types/model/UserCourse";
 import { usePage, Head, router } from "@inertiajs/react";
 import { Pagination as PaginationComp } from "@/components/Pagination";
 import { Button } from "@/components/ui/button";

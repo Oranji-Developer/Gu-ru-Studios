@@ -10,6 +10,7 @@ import { UserSchema } from "@/lib/schema/UserSchema";
 import { router } from "@inertiajs/react";
 import { z } from "zod";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { passwordResetToast } from "@/lib/toast/auth/ResetPasswordToast";
 
 export default function ResetPassword({
     token,
@@ -34,6 +35,12 @@ export default function ResetPassword({
 
         if (dataParse.success) {
             post(route("password.store"), {
+                onSuccess: (event) => {
+                    const status = event.props.session.flash.success;
+                    if (status === "password-reset") {
+                        passwordResetToast();
+                    }
+                },
                 onFinish: () => {
                     reset();
                 },
@@ -48,9 +55,9 @@ export default function ResetPassword({
         <GuestLayout>
             <Head title="Reset Password" />
 
-            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
+            <section className="py-4 md:px-8 w-full md:w-[calc(40vw-6rem)] flex flex-col justify-center h-screen md:block md:h-auto">
                 <div className="mb-4">
-                    <h1 className="text-[3.25rem] font-medium">
+                    <h1 className="text-4xl leading-normal md:text-[3.25rem] font-medium">
                         Ubah Password
                     </h1>
                     <p className="text-2xl text-gray-400 leading-7">

@@ -1,6 +1,6 @@
 import React from "react";
 import { AdminLayout } from "@/Layouts/AdminLayout";
-import { UserCourse } from "@/types/UserCourse";
+import { UserCourse } from "@/types/model/UserCourse";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { UserCourseSchema } from "@/lib/schema/UserCourseSchema";

@@ -1,7 +1,8 @@
 import { AdminLayout } from "@/Layouts/AdminLayout";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Head } from "@inertiajs/react";
+import { toast } from "@/hooks/use-toast";
+import { Head, usePage, router } from "@inertiajs/react";
 
 export default function Dashboard() {
     return (

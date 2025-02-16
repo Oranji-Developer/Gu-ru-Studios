@@ -10,6 +10,8 @@ import { z } from "zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { useToast } from "@/hooks/use-toast";
+import { passwordResetRequestToast } from "@/lib/toast/auth/ResetPasswordToast";
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors, reset } = useForm<
@@ -25,6 +27,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
         if (dataParse.success) {
             post(route("password.email"), {
+                onSuccess: (event) => {
+                    const status = event.props.session.flash.success;
+                    if (status === "password-reset-link-sent")
+                        passwordResetRequestToast();
+                },
                 onFinish: () => {
                     reset();
                 },
@@ -38,22 +45,16 @@ export default function ForgotPassword({ status }: { status?: string }) {
     return (
         <GuestLayout>
             <Head title="Forgot Password" />
-            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
+            <section className="py-4 md:px-8 w-full md:w-[calc(40vw-6rem)] flex flex-col justify-center h-screen md:block md:h-auto">
                 <div className="mb-4">
-                    <h1 className="text-[3.25rem] font-medium">
+                    <h1 className="text-4xl leading-normal md:text-[3.25rem] font-medium">
                         Lupa Password?
                     </h1>
-                    <p className="text-2xl text-gray-400 leading-7">
+                    <p className="md:text-2xl text-gray-400 leading-7">
                         Jangan khawatir, kami akan mengirimkan instruksi
                         pengaturan ulang.
                     </p>
                 </div>
-
-                {status && (
-                    <div className="mb-4 text-sm font-medium text-green-600">
-                        {status}
-                    </div>
-                )}
 
                 <form onSubmit={submit}>
                     <Label htmlFor="email">Email</Label>

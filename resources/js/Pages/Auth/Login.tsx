@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "@/lib/schema/UserSchema";
 import GoogleIcon from "@/assets/svgr/google";
 import InputPassword from "@/components/InputPassword";
 import { router } from "@inertiajs/react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
+import { loggedInToast } from "@/lib/toast/auth/AuthToast";
 
 export default function Login({
     status,
@@ -23,11 +23,8 @@ export default function Login({
     const { data, setData, post, processing, errors, reset } = useForm<
         z.infer<typeof UserSchema.LOGIN>
     >({
-        resolver: zodResolver(UserSchema.LOGIN),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
+        email: "",
+        password: "",
     });
 
     const submit: FormEventHandler = (e) => {
@@ -36,21 +33,26 @@ export default function Login({
         const dataParse = UserSchema.LOGIN.safeParse(data);
 
         if (dataParse.success) {
-            post(route("login"), {
-                onFinish: () => {
-                    reset();
-                },
-            });
+            post(route("login"));
         } else {
             handlingZodInputError(dataParse, errors);
             router.reload();
         }
     };
 
+    router.on("success", (event) => {
+        const page = event.detail.page;
+        const session = page.props.session;
+        const user = page.props.auth.user;
+        if (session.flash.success === "authenticated") {
+            loggedInToast(user);
+        }
+    });
+
     return (
         <GuestLayout>
             <Head title="Log in" />
-            <section className="px-8 py-4 w-[calc(40vw-6rem)]">
+            <section className="py-4 md:px-8 w-full md:w-[calc(40vw-6rem)]">
                 <div className="mb-8">
                     <h1 className="text-[3.25rem] font-medium">Login</h1>
                     <p className="text-gray-500">

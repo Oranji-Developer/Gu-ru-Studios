@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { router } from "@inertiajs/react";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import { UserCourse } from "@/types/UserCourse";
+import { UserCourse } from "@/types/model/UserCourse";
 
 export const columns: ColumnDef<UserCourse>[] = [
     {

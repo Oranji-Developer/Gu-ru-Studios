@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { FormEventHandler } from "react";
 import { handlingZodInputError } from "@/lib/utils/handlingInputError";
 import { router } from "@inertiajs/react";
-import { Mentor } from "@/types/Mentor";
+import { Mentor } from "@/types/model/Mentor";
 
 export default function Edit() {
     const page = usePage().props;

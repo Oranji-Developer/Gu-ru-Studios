@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NavigationMenuItemProps } from "@radix-ui/react-navigation-menu";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Authenticated({
     header,
@@ -126,6 +127,7 @@ export default function Authenticated({
             <main className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-16 pt-6">
                 {children}
             </main>
+            <Toaster />
         </div>
     );
 }

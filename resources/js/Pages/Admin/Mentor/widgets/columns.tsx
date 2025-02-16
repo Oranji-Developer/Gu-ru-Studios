@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { router } from "@inertiajs/react";
-import { Mentor } from "@/types/Mentor";
+import { Mentor } from "@/types/model/Mentor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import {

@@ -4,7 +4,7 @@ import { Head, usePage, router } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { columns } from "./widgets/columns";
-import { UserCourse } from "@/types/UserCourse";
+import { UserCourse } from "@/types/model/UserCourse";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
