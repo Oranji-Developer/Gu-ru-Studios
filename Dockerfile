@@ -1,7 +1,7 @@
 # Build stage for Node/Bun assets
 FROM oven/bun:latest AS node-builder
 WORKDIR /app
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build
@@ -29,12 +29,16 @@ COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
 
 # Copy all application files first
 COPY --chown=www-data:www-data . .
+COPY .env .env
 
 # Copy built assets from node-builder stage
 COPY --from=node-builder --chown=www-data:www-data /app/public/build public/build
 
+# Copy composer.lock and composer.json
+COPY composer.lock composer.json ./
+
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --optimize-autoloader
 
 # Laravel specific commands
 # Optimize Laravel

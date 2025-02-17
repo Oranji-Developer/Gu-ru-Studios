@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Enum\Users\RoleEnum;
 use App\Models\User;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use http\Env;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,16 +17,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            UserSeeder::class,
-            EventSeeder::class,
-            ContentSeeder::class,
-            MentorSeeder::class,
-            CourseSeeder::class,
-            ScheduleSeeder::class,
-            ChildrenSeeder::class,
-            UserCourseSeeder::class,
-            TestimonySeeder::class,
+//        if (env('APP_TESTING')) {
+        User::factory()->create([
+            'name' => 'Admin1',
+            'email' => 'test@gmail.com',
+            'password' => Hash::make("password"),
+            'role' => RoleEnum::ADMIN->value,
+            'phone' => '081234567890',
+            'address' => 'Jl. Test No. 1',
+            'email_verified_at' => now(),
         ]);
+
+//        } else {
+//            $this->call([
+//                UserSeeder::class,
+//                EventSeeder::class,
+//                ContentSeeder::class,
+//                MentorSeeder::class,
+//                CourseSeeder::class,
+//                ScheduleSeeder::class,
+//                ChildrenSeeder::class,
+//                UserCourseSeeder::class,
+//                TestimonySeeder::class,
+//            ]);
+//        }
     }
 }

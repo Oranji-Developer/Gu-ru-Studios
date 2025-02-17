@@ -1,7 +1,7 @@
 services:
   migrate:
     build: .
-    command: sh -c "sleep 10 && php artisan migrate --force && touch /mnt/migration-complete"
+    command: sh -c "sleep 10 && php artisan migrate --force && php artisan db:seed --force"
     volumes:
       - .:/var/www/html
       - ./.env:/var/www/html/.env
