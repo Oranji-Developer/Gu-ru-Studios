@@ -29,7 +29,6 @@ COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
 
 # Copy all application files first
 COPY --chown=www-data:www-data . .
-COPY .env .env
 
 # Copy built assets from node-builder stage
 COPY --from=node-builder --chown=www-data:www-data /app/public/build public/build

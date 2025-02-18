@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Trait\HelperTrait;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\URL;
 
 class SendVerificationEmail extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, HelperTrait;
 
     /**
      * Create a new notification instance.
@@ -57,11 +58,14 @@ class SendVerificationEmail extends Notification implements ShouldQueue
 
             Log::info('Sending verification email to: ' . $notifiable->email);
 
+            $path = $this->asset_vite('resources/css/app.css');
+
             return (new MailMessage)
                 ->subject('Welcome to ' . config('app.name') . ' - Verify Your Email')
                 ->view('emails.verification', [
                     'user' => $notifiable->name,
                     'verificationUrl' => $verificationUrl,
+                    'path' => $path
                 ]);
         } catch (\Exception $e) {
             Log::error('Error sending verification email: ' . $e->getMessage());

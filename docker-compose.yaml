@@ -21,6 +21,13 @@ services:
       - .:/var/www/html
       - ./.env:/var/www/html/.env
       - storage:/var/www/html/storage
+    env_file:
+      - .env
+    environment:
+      APP_ENV: ${APP_ENV}
+      APP_DEBUG: ${APP_DEBUG}
+      APP_PW: ${APP_PW}
+      APP_TESTING: ${APP_TESTING}
     depends_on:
       migrate:
         condition: service_completed_successfully

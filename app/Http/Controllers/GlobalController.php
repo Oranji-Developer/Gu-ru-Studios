@@ -11,6 +11,7 @@ use App\Models\Course;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 class GlobalController extends Controller
 {
     public function home(Request $request)

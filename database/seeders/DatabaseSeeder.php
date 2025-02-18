@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin1',
             'email' => 'test@gmail.com',
-            'password' => Hash::make("password"),
+            'password' => Hash::make(config('app.prod.app_pw')),
             'role' => RoleEnum::ADMIN->value,
             'phone' => '081234567890',
             'address' => 'Jl. Test No. 1',
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 
 //        } else {
 //            $this->call([
-//                UserSeeder::class,
+//                UserSeeder::class,q
 //                EventSeeder::class,
 //                ContentSeeder::class,
 //                MentorSeeder::class,

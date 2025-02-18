@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Trait\HelperTrait;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Bus\Queueable;
@@ -12,10 +13,9 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Log;
 
 
-
 class ResetPasswordNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, HelperTrait;
 
     /**
      * The password reset token.
@@ -57,11 +57,10 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     }
 
 
-
     /**
      * Get the reset URL for the given notifiable.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return string
      */
     protected function resetUrl(mixed $notifiable): string
@@ -75,7 +74,6 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
             'email' => $notifiable->getEmailForPasswordReset(),
         ], false));
     }
-
 
 
     /**
@@ -93,7 +91,9 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
 
             Log::info('Sending verification email to: ' . $notifiable->email);
 
-            return $this->buildMailMessage($resetPasswordUrl, $notifiable);
+            $path = $this->asset_vite('resources/css/app.css');
+
+            return $this->buildMailMessage($resetPasswordUrl, $notifiable, $path);
         } catch (\Exception $e) {
             Log::error('Error sending verification email: ' . $e->getMessage());
             return null;
@@ -103,16 +103,19 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     /**
      * Get the reset password notification mail message for the given URL.
      *
-     * @param  string  $url
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @param string $url
+     * @param object $notifiable
+     * @param $path
+     * @return MailMessage
      */
-    protected function buildMailMessage($url, object $notifiable)
+    protected function buildMailMessage($url, object $notifiable, $path): MailMessage
     {
         return (new MailMessage)
             ->subject('Welcome to ' . config('app.name') . ' - Reset Password Link')
             ->view('emails.resetPassword', [
                 'user' => $notifiable->name,
                 'resetPasswordUrl' => $url,
+                'path' => $path
             ]);
     }
 

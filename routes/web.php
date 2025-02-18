@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/health', function () {
+    Log::info('Health check ok ' . now());
     return response()->json(['status' => 'ok']);
-});
-
-Route::get('/info', function () {
-    dd(phpinfo(), php_ini_loaded_file());
 });
