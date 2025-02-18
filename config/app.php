@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -123,4 +123,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'prod' => [
+        'app_pw' => env('APP_PW', 'password'),
+        'app_testing' => env('APP_TESTING', false),
+        'app_url' => env('APP_URL', 'http://localhost'),
+    ],
 ];

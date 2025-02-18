@@ -5,13 +5,18 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @vite('resources/css/app.css')
+    @if (config('app.prod.app_testing') == "true")
+        <link rel="stylesheet" href="{{ $path }}">
+    @else
+        @vite('resources/css/app.css')
+    @endif
+
     <title>Verification</title>
 </head>
 <body>
 <section class="flex flex-col gap-7 p-[6.25rem]">
     <div class="flex flex-col gap-9 w-fit">
-        <img src="{{asset('images/logo.svg')}}" alt="logo" class="w-1/4">
+        <img src="{{config('app.prod.app_url')."/public/images/logo.svg"}}" alt="logo" class="w-1/4">
         <h1 class="text-[2.5rem] font-semibold">Verify Your Email to<br> Get Started!</h1>
     </div>
     <div class="flex flex-col gap-6">

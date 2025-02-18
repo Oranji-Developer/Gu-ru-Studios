@@ -1,0 +1,96 @@
+services:
+  migrate:
+    build: .
+    command: sh -c "sleep 10 && php artisan migrate --force && php artisan db:seed --force"
+    volumes:
+      - .:/var/www/html
+      - ./.env:/var/www/html/.env
+      - storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - laravel-network
+    restart: on-failure
+
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+      - ./.env:/var/www/html/.env
+      - storage:/var/www/html/storage
+    env_file:
+      - .env
+    environment:
+      APP_ENV: ${APP_ENV}
+      APP_DEBUG: ${APP_DEBUG}
+      APP_PW: ${APP_PW}
+      APP_TESTING: ${APP_TESTING}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      mysql:
+        condition: service_healthy
+    networks:
+      - laravel-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  queue:
+    build: .
+    command: sh -c "php artisan queue:work --daemon --verbose --timeout=90"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      mysql:
+        condition: service_healthy
+    networks:
+      - laravel-network
+    restart: always
+
+  scheduler:
+    build: .
+    command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      mysql:
+        condition: service_healthy
+    networks:
+      - laravel-network
+    restart: always
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - laravel-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  mysql:
+  storage:
+
+networks:
+  laravel-network:
+    driver: bridge
